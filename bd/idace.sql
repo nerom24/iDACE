@@ -170,7 +170,7 @@ INSERT INTO cursos(id, curso, nivel, ciclo) VALUES
 (null, '2AD', 'AD', 'FP');
 
 -- importar profesores
-LOAD DATA INFILE "C:/xampp/htdocs/idace/bd/tabla_profesores_22_23.csv" INTO TABLE 
+LOAD DATA INFILE "C:/xampp/htdocs/idace/bd/tabla_profesores_23_24.csv" INTO TABLE 
 idace.profesores
 CHARACTER SET UTF8
 FIELDS TERMINATED BY ';' optionally ENCLOSED BY '\"' LINES TERMINATED BY '\n'
@@ -180,36 +180,37 @@ IGNORE 1 LINES
 -- actividades de muestra
 INSERT INTO actividades VALUES 
 (
-	null, 
-    1,
-    '22/23',
-    'Viaje Fin de curso 4ESO', 
-    null, 
-    '2023/03/15', 
-    null, 
-    null, 
-    null, 
-    false, 
-    36, 
-    1, 
-    '4ESO', 
-    null,
-    'DACE', 
-    null, 
-    78, 
-    'Pirineos Catalanes', 
-    null, 
-    null, 
-    'Afectados', 
-    'Pasarán a prestar servicio de guardia si procede', 
-    null, 
-    null, 
-    'Viajes', 
-    'Planificado', 
-    1, 
-    1, 
-    'jmorjim394@gmail.com', 
-    'Juan Carlos', 
+	null, 								-- id
+    1,  								-- num_actividad
+    '23/24',							-- curso
+    'Viaje Fin de curso 4ESO', 			-- titulo
+    null, 								-- descripción
+    1,									-- jornadas
+    '2023/03/15',						-- fecha_inicio 						
+    null, 								-- fecha_fin
+    '9:30:00', 							-- hora_inicio
+    '10:30:00', 						-- hora_fin
+    false, 								-- dia_completo
+    1, 									-- horas_lectivas
+    1, 									-- eval
+    '4ESO', 							-- cursos
+    null,								-- observaciones_cursos_horas
+    'DACE', 							-- especialidad
+    null,								-- tramo_horario 
+    78, 								-- num_alumnos
+    'Pirineos Catalanes', 				-- lugar_celebracion
+    null, 								-- colaboracion_coordinador
+    null, 								-- colaboracion_departamentos
+    'Afectados', 						-- profesores_participantes
+    'Pasarán a prestar servicio de guardia si procede', -- que_hacen_afectados
+    null, 								-- observaciones
+    null, 								-- adjuntos
+    "viajes", 							-- categorias
+    'Planificado', 						-- estado
+    1, 									-- departamento_id
+    1, 									-- coordinador_id
+    'jmorjim394@gmail.com', 			-- email
+    'Juan Carlos', 						-- nombre
     default, 
     default 
     );

@@ -9,7 +9,7 @@
 
     class Actividad {
 
-        public $id;
+        public $id; 
         public $num_actividad;
         public $curso;
         public $titulo;
@@ -19,6 +19,7 @@
         public $fecha_fin;
         public $hora_inicio;
         public $hora_fin;
+        public $dia_completo;
         public $horas_lectivas;
         public $eval;
         public $cursos;
@@ -53,6 +54,7 @@
             $fecha_fin                      = null,
             $hora_inicio                    = null,
             $hora_fin                       = null,
+            $dia_completo                   = false,
             $horas_lectivas                 = null,
             $eval                           = null,
             $cursos                         = null,
@@ -84,9 +86,10 @@
             $this->fecha_fin                      = $fecha_fin;
             $this->hora_inicio                    = $hora_inicio;
             $this->hora_fin                       = $hora_fin;
+            $this->dia_completo                   = $dia_completo;
             $this->horas_lectivas                 = $horas_lectivas;
             $this->eval                           = $eval;
-            $this->cursos                         = $cusos;
+            $this->cursos                         = $cursos;
             $this->observaciones_cursos_horas     = $observaciones_cursos_horas;
             $this->especialidad                   = $especialidad;
             $this->tramo_horario                  = $tramo_horario;

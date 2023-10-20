@@ -2,7 +2,7 @@
 
     class Actividades Extends Controller {
 
-        public function render() {
+         function render() {
 
             # inicio o continuo sesión
             sec_session_start();
@@ -36,7 +36,7 @@
             
         }
 
-        public function nuevo() {
+         function nuevo() {
 
             # Iniciamos o continuamos sesión
             sec_session_start();
@@ -99,7 +99,7 @@
 
         }
 
-        public function create($param = []) {
+         function create($param = []) {
 
             # inicio sesión
             sec_session_start();
@@ -126,34 +126,76 @@
             $descripcion = filter_var($_POST['descripcion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $lugar_celebracion = filter_var($_POST['lugar_celebracion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $especialidad = filter_var($_POST['especialidad'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            
+            # calendario
+            
             $jornadas = filter_var($_POST['jornadas'] ??= '', FILTER_SANITIZE_NUMBER_INT);
             $fecha_inicio = filter_var($_POST['fecha_inicio'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $fecha_fin = filter_var($_POST['fecha_fin'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $eval = filter_var($_POST['eval'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+
+            # horario
             $hora_inicio = filter_var($_POST['hora_incio'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $hora_fin = filter_var($_POST['hora_fin'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-
             $tramo_horario = $_POST['tramo_horario'];
+            $dia_completo = filter_var($_POST['dia_completo'] ??= '', FILTER_SANITIZE_NUMBER_INT);
+            $horas_lectivas = filter_var($_POST['horas_lectivas'] ??= '', FILTER_SANITIZE_NUMBER_FLOAT);
+            
 
-            $fechaNac = filter_var($_POST['fechaNac'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $poblacion = filter_var($_POST['poblacion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $dni = filter_var($_POST['dni'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $id_curso = filter_var($_POST['id_curso'] ??= '', FILTER_SANITIZE_NUMBER_INT);
+            # alumnos
+
+            $cursos = $_POST['cursos'];
+            $num_alumnos = filter_var($_POST['num_alumnos'] ??= '', FILTER_SANITIZE_NUMBER_INT);
+            $observaciones_cursos_horas = filter_var($_POST['observaciones_cursos_horas'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+
+            # organización
+            $coordinador_id = filter_var($_POST['coordinador_id'] ??= '', FILTER_SANITIZE_NUMBER_INT);
+            $departamento_id = filter_var($_POST['departamento_id'] ??= '', FILTER_SANITIZE_NUMBER_INT);
+            $profesores_participantes = $_POST['profesores_participantes'];
+            $que_hacen_afectados = filter_var($_POST['que_hacen_afectados'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $colaboracion_coordinador = filter_var($_POST['colaboracion_coordinador'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+
+            # final
+
+            $observaciones = filter_var($_POST['observaciones'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             
             # 2. Creamos el objeto alumno con los datos saneados
-            $new_alumno = new Alumno(
-                null,
-                $nombre,
-                $apellidos,
-                $email,
-                null,
-                null,
-                $poblacion,
-                null,
-                null, 
-                $dni,      
-                $fechaNac,
-                $id_curso
+            $new_actividad = new Actividad(
+                    null,
+                    null,
+                    '23/24', 
+                    $titulo,
+                    $descripcion,
+                    $jornadas,
+                    $fecha_inicio,
+                    $fecha_fin,
+                    $hora_inicio,
+                    $hora_fin,
+                    $dia_completo,
+                    $horas_lectivas,
+                    $eval,
+                    $cursos,
+                    $observaciones_cursos_horas,
+                    $especialidad,
+                    $tramo_horario,
+                    $num_alumnos,
+                    $lugar_celebracion,
+                    $colaboracion_coordinador,
+                    null,
+                    $profesores_participantes,
+                    $que_hacen_afectados,
+                    $observaciones,
+                    null,
+                    null,
+                    'planificado',
+                    $departamento_id,
+                    $coordinador_id,
+                    $email,
+                    $nombre
             );
+
+            var_dump($new_actividad);
+            exit();
 
             # 3. Validación de los datos
             
@@ -249,7 +291,7 @@
         }
         
         /*
-        public function new() {
+         function new() {
 
             # Iniciar o continuar sesión segura
             sec_session_start();
@@ -287,7 +329,7 @@
         # 
         # Validación actividad
         #
-        public function create() {
+         function create() {
 
             # Inicio o reanudación de sessión
             sec_session_start();
