@@ -91,8 +91,15 @@ class Actividades extends Controller
             # obtener los cursos
             $this->view->cursos = $this->model->getCursos();
 
+            # cargar los campos por defecto nombre usuario y email
+            $this->view->actividad->nombre = $_SESSION['name_user'];
+            $this->view->actividad->email = $_SESSION['email_user'];
+
+
             # carge la vista nuevo formulario
             $this->view->render('actividades/nuevo/index');
+
+           
         }
     }
 
@@ -105,12 +112,10 @@ class Actividades extends Controller
         # Compruebo usuario autentificado
         if (!isset($_SESSION['id'])) {
             $_SESSION['mensaje'] = "Usuario debe autentificarse";
-
             header("location:" . URL . "login");
-        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['crear']))) {
-
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['actividad']['new']))) {
             $_SESSION['mensaje'] = "Operación sin privilegios";
-            header("location:" . URL . "alumnos");
+            header("location:" . URL . "actividad");
         } else {
 
 
@@ -196,6 +201,12 @@ class Actividades extends Controller
             # 3. Validación de los datos
 
             $errores = [];
+
+            // Validación del título
+            // - campo obligatorio
+            if (empty($titulo)) {
+                $errores['titulo'] = 'Campo obligatorio';
+            }
 
             // Validamos nombre
             // Valor obligatorio

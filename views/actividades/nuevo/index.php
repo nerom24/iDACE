@@ -55,8 +55,8 @@
 
                     <!-- titulo -->
                     <div class="mb-3">
-                        <label for="titulo" class="form-label">Título</label>
-                        <input type="text" class="form-control <?= (isset($this->errores['titulo'])) ? 'is-invalid' : null ?>" name="titulo" value="<?= $this->actividad->titulo ?>">
+                        <label for="titulo" class="form-label">Título *</label>
+                        <input type="text" class="form-control <?= (isset($this->errores['titulo'])) ? 'is-invalid' : null ?>" name="titulo" value="<?= $this->actividad->titulo ?>" required autofocus >
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['titulo'])) : ?>
                             <span class="form-text text-danger" role="alert">
