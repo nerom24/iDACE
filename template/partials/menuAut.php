@@ -9,8 +9,8 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="<?= URL ?>index"">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="<?= URL ?>actividades">Actividades</a>
+        <li class=" nav-item">
+            <a class="nav-link active" href="<?= URL ?>actividades">Actividades</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="#">Planificación</a>
@@ -23,24 +23,12 @@
         </li>
       </ul>
       <div class="d-flex">
-        <ul class="nav navbar-nav flex-row  ml-auto">
-            <li class="nav-item dropdown">
-               
-                <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-person-bounding-box"><?= str_pad($_SESSION['name_user'], 15, ' __ ', STR_PAD_LEFT) ?></i>
-                    
-                </a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="<?= URL ?>logout">Logout</a>
-                    <a class="dropdown-item" href="<?= URL ?>perfil/edit">Modificar Perfil</a>
-                    <a class="dropdown-item" href="<?= URL ?>perfil/pass">Cambiar Password</a>
-                    <a class="dropdown-item" href="<?= URL ?>perfil/show">Eliminar Perfil</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><?= $_SESSION['name_rol'] ?></a>
-                </div>
-            </li>
-
-        </ul>
+        <div class="collapse navbar-collapse" id="exCollapsingNavbar">
+          <ul class="nav navbar-nav flex-row justify-content-between ml-auto">
+            <li class="nav-item"><a href="<?= URL ?>perfil" class="nav-link active"><?= $_SESSION['name_user'] . ' | ' ?></a></li>
+            <li class="nav-item"><a href="<?= URL ?>logout" class="nav-link active">Logout</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

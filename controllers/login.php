@@ -120,6 +120,7 @@
                 
                 $_SESSION['id'] = $user->id; 
                 $_SESSION['name_user'] = $user->name;
+                $_SESSION['email_user'] = $user->email;
                 $_SESSION['id_rol'] = $this->model->getUserIdPerfil($user->id);
                 $_SESSION['name_rol'] = $this->model->getUserPerfil($_SESSION['id_rol']);
 

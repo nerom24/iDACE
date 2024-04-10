@@ -1,121 +1,117 @@
 <?php
 
-    class Actividades Extends Controller {
+class Actividades extends Controller
+{
 
-         function render() {
+    function render()
+    {
 
-            # inicio o continuo sesión
-            sec_session_start();
+        # inicio o continuo sesión
+        sec_session_start();
 
-            # compruebo usuario autentificado
-            if (!isset($_SESSION['id'])) {
-                $_SESSION['mensaje'] = "Usuario debe autentificarse";
-                
-                header("location:". URL. "login");
-                
-            } else {
+        # compruebo usuario autentificado
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario debe autentificarse";
+            header("location:" . URL . "login");
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['actividad']['main']))) {
+            $_SESSION['mensaje'] = "Ha intentado realizar operación sin privilegios";
+            header('location:' . URL . 'index');
+        } else {
 
-                # Comprueba si existe mensaje
-                if (isset($_SESSION['mensaje'])) {
-                    $this->view->mensaje = $_SESSION['mensaje'];
-                    unset($_SESSION['mensaje']);
-                }
+            # Comprueba si existe mensaje
+            if (isset($_SESSION['mensaje'])) {
+                $this->view->mensaje = $_SESSION['mensaje'];
+                unset($_SESSION['mensaje']);
+            }
 
-                // Mostrará todas las actividades
-                $this->view->title="Actividades";
-                $this->view->actividades = $this->model->get();
-                
-                $this->view->render('actividades/main/index');
+            // Mostrará todas las actividades
+            $this->view->title = "Actividades";
+            $this->view->actividades = $this->model->get();
 
-                # En la carpeta views tengo que crear la carpeta alumnos
-                # Dentro de la carpeta alumnos creo main
-                # En main creo index.php que corresponde a la vista que muestra los alumnos
+            $this->view->render('actividades/main/index');
 
+            # En la carpeta views tengo que crear la carpeta alumnos
+            # Dentro de la carpeta alumnos creo main
+            # En main creo index.php que corresponde a la vista que muestra los alumnos
+
+        }
+    }
+
+    function nuevo()
+    {
+
+        # Iniciamos o continuamos sesión
+        sec_session_start();
+
+        # Compruebo usuario autentificado
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario debe autentificarse";
+
+            header("location:" . URL . "login");
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['actividad']['new']))) {
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header("location:" . URL . "actividad");
+        } else {
+
+            # Crear objeto vacío de la clase actividad
+            $this->view->actividad = new Actividad();
+
+            # Compruebo si existe algún error en la validación
+            if (isset($_SESSION['error'])) {
+
+                # Mensaje de error
+                $this->view->error = $_SESSION['error'];
+                unset($_SESSION['error']);
+
+                # Autorrelleno del formulario
+                $this->view->actividad = unserialize($_SESSION['actividad']);
+                unset($_SESSION['actividad']);
+
+                # Cargo los errores específicos
+                $this->view->errores = $_SESSION['errores'];
+                unset($_SESSION['errores']);
             }
 
             
+
+            # título de la vista
+            $this->view->title = "DACE - Formulario Planificación Actividades";
+
+            # obtener los profesores generar dinámicamente combox de profesores
+            $this->view->profesores = $this->model->getProfesores();
+
+            $this->view->acompanantes = $this->model->getProfesores();
+
+            # obtener los departamentos generar dinámicamente combox de departamentos
+            $this->view->departamentos = $this->model->getDepartamentos();
+
+            # obtener las categorías generar dinámicamente etiquetas de categorías
+            $this->view->categorias = $this->model->getCategorias();
+
+            # obtener los cursos
+            $this->view->cursos = $this->model->getCursos();
+
+            # carge la vista nuevo formulario
+            $this->view->render('actividades/nuevo/index');
         }
+    }
 
-         function nuevo() {
+    function create($param = [])
+    {
 
-            # Iniciamos o continuamos sesión
-            sec_session_start();
+        # inicio sesión
+        sec_session_start();
 
-            # Compruebo usuario autentificado
-            if (!isset($_SESSION['id'])) {
-                $_SESSION['mensaje'] = "Usuario debe autentificarse";
-                
-                header("location:". URL. "login");
-                
-            } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['crear']))){
+        # Compruebo usuario autentificado
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario debe autentificarse";
 
-                $_SESSION['mensaje'] = "Operación sin privilegios";
-                header("location:" .URL. "alumnos");
+            header("location:" . URL . "login");
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['crear']))) {
 
-            } else {
-
-                # Crear objeto vacío de la clase actividad
-                $this->view->actividad = new Actividad();
-
-                # Compruebo si existe algún error en la validación
-                if (isset($_SESSION['error'])) {
-
-                    # Mensaje de error
-                    $this->view->error = $_SESSION['error'];
-                    unset($_SESSION['error']);
-
-                    # Autorrelleno del formulario
-                    $this->view->actividad = unserialize($_SESSION['actividad']);
-                    unset($_SESSION['actividad']);
-
-                    # Cargo los errores específicos
-                    $this->view->errores = $_SESSION['errores'];
-                    unset($_SESSION['errores']);
-
-
-                }
-                
-                # título de la vista
-                $this->view->title = "DACE - Formulario Planificación Actividades";
-
-                # obtener los profesores generar dinámicamente combox de profesores
-                $this->view->profesores = $this->model->getProfesores();
-
-                $this->view->acompanantes = $this->model->getProfesores();
-
-                # obtener los departamentos generar dinámicamente combox de departamentos
-                $this->view->departamentos = $this->model->getDepartamentos();
-
-                # obtener las categorías generar dinámicamente etiquetas de categorías
-                $this->view->categorias = $this->model->getCategorias();
-
-                # obtener los cursos
-                $this->view->cursos = $this->model->getCursos();
-
-                # carge la vista nuevo formulario
-                $this->view->render('actividades/nuevo/index');
-
-            }
-
-        }
-
-         function create($param = []) {
-
-            # inicio sesión
-            sec_session_start();
-
-            # Compruebo usuario autentificado
-            if (!isset($_SESSION['id'])) {
-                $_SESSION['mensaje'] = "Usuario debe autentificarse";
-                
-                header("location:". URL. "login");
-                
-            } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['crear']))){
-
-                $_SESSION['mensaje'] = "Operación sin privilegios";
-                header("location:" .URL. "alumnos");
-
-            } else {
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header("location:" . URL . "alumnos");
+        } else {
 
 
             # Validación Formularios
@@ -126,9 +122,9 @@
             $descripcion = filter_var($_POST['descripcion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $lugar_celebracion = filter_var($_POST['lugar_celebracion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $especialidad = filter_var($_POST['especialidad'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            
+
             # calendario
-            
+
             $jornadas = filter_var($_POST['jornadas'] ??= '', FILTER_SANITIZE_NUMBER_INT);
             $fecha_inicio = filter_var($_POST['fecha_inicio'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $fecha_fin = filter_var($_POST['fecha_fin'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -137,79 +133,79 @@
             # horario
             $hora_inicio = filter_var($_POST['hora_incio'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $hora_fin = filter_var($_POST['hora_fin'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $tramo_horario = $_POST['tramo_horario'];
+            $tramo_horario = filter_var($_POST['tramo_horario'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $dia_completo = filter_var($_POST['dia_completo'] ??= '', FILTER_SANITIZE_NUMBER_INT);
             $horas_lectivas = filter_var($_POST['horas_lectivas'] ??= '', FILTER_SANITIZE_NUMBER_FLOAT);
-            
+
 
             # alumnos
 
-            $cursos = $_POST['cursos'];
+            $cursos = filter_var($_POST['cursos'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $num_alumnos = filter_var($_POST['num_alumnos'] ??= '', FILTER_SANITIZE_NUMBER_INT);
             $observaciones_cursos_horas = filter_var($_POST['observaciones_cursos_horas'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
 
             # organización
             $coordinador_id = filter_var($_POST['coordinador_id'] ??= '', FILTER_SANITIZE_NUMBER_INT);
             $departamento_id = filter_var($_POST['departamento_id'] ??= '', FILTER_SANITIZE_NUMBER_INT);
-            $profesores_participantes = $_POST['profesores_participantes'];
+            $profesores_participantes = filter_var($_POST['profesores_participantes'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $que_hacen_afectados = filter_var($_POST['que_hacen_afectados'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $colaboracion_coordinador = filter_var($_POST['colaboracion_coordinador'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
 
             # final
 
             $observaciones = filter_var($_POST['observaciones'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            
+
             # 2. Creamos el objeto alumno con los datos saneados
             $new_actividad = new Actividad(
-                    null,
-                    null,
-                    '23/24', 
-                    $titulo,
-                    $descripcion,
-                    $jornadas,
-                    $fecha_inicio,
-                    $fecha_fin,
-                    $hora_inicio,
-                    $hora_fin,
-                    $dia_completo,
-                    $horas_lectivas,
-                    $eval,
-                    $cursos,
-                    $observaciones_cursos_horas,
-                    $especialidad,
-                    $tramo_horario,
-                    $num_alumnos,
-                    $lugar_celebracion,
-                    $colaboracion_coordinador,
-                    null,
-                    $profesores_participantes,
-                    $que_hacen_afectados,
-                    $observaciones,
-                    null,
-                    null,
-                    'planificado',
-                    $departamento_id,
-                    $coordinador_id,
-                    $email,
-                    $nombre
+                null,
+                null,
+                '23/24',
+                $titulo,
+                $descripcion,
+                $jornadas,
+                $fecha_inicio,
+                $fecha_fin,
+                $hora_inicio,
+                $hora_fin,
+                $dia_completo,
+                $horas_lectivas,
+                $eval,
+                $cursos,
+                $observaciones_cursos_horas,
+                $especialidad,
+                $tramo_horario,
+                $num_alumnos,
+                $lugar_celebracion,
+                $colaboracion_coordinador,
+                null,
+                $profesores_participantes,
+                $que_hacen_afectados,
+                $observaciones,
+                null,
+                null,
+                'planificado',
+                $departamento_id,
+                $coordinador_id,
+                $email,
+                $nombre
             );
 
             var_dump($new_actividad);
             exit();
 
             # 3. Validación de los datos
-            
+
             $errores = [];
 
             // Validamos nombre
             // Valor obligatorio
-            if(empty($nombre)) {
+            if (empty($nombre)) {
                 $errores['nombre'] = 'Campo obligatorio';
-            } 
+            }
 
             // Validamos apellidos
             // Valor obligatorio
-            if(empty($apellidos)) {
+            if (empty($apellidos)) {
                 $errores['apellidos'] = 'Campo obligatorio';
             }
 
@@ -218,7 +214,7 @@
 
             // Validamos email
             // Verificar obligatorio, email, único
-            if(empty($email)) {
+            if (empty($email)) {
                 $errores['email'] = 'Campo obligatorio';
             } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errores['email'] = 'Email incorrecto';
@@ -228,7 +224,7 @@
 
             // Validamos fecha nacimiento
             // Campo obligatorio
-            if(empty($fechaNac)) {
+            if (empty($fechaNac)) {
                 $errores['fechaNac'] = 'Campo obligatorio';
             }
 
@@ -239,7 +235,7 @@
                     'regexp' => '/^(\d{8})([A-Z])$/'
                 ]
             ];
-            if(empty($dni)) {
+            if (empty($dni)) {
                 $errores['dni'] = 'Campo obligatorio';
             } else if (!filter_var($dni, FILTER_VALIDATE_REGEXP, $options)) {
                 $errores['dni'] = 'DNI con formato incorrecto';
@@ -249,7 +245,7 @@
 
             // Validamos id_curso
             // Verificar obligatorio, entero, existe
-            if(empty($id_curso)) {
+            if (empty($id_curso)) {
                 $errores['id_curso'] = 'Campo obligatorio';
             } else if (!filter_var($id_curso, FILTER_VALIDATE_INT)) {
                 $errores['id_curso'] = 'Curso no válido';
@@ -258,7 +254,7 @@
             }
 
             # 4. Comprobar validación
-            
+
             if (!empty($errores)) {
 
                 # Debug
@@ -272,7 +268,7 @@
 
                 # Redireccionamos a nuevo alumno
 
-                header('location:'. URL. 'alumnos/nuevo');
+                header('location:' . URL . 'alumnos/nuevo');
             } else {
 
                 # Crear alumno
@@ -282,15 +278,12 @@
                 $_SESSION['mensaje'] = 'Alumno creado correctamente';
 
                 # Redireccionamos 
-                header('location:'.URL.'alumnos');
+                header('location:' . URL . 'alumnos');
             }
-        
         }
+    }
 
-
-        }
-        
-        /*
+    /*
          function new() {
 
             # Iniciar o continuar sesión segura
@@ -404,6 +397,4 @@
 
         }
         */
-    }
-
-?>
+}

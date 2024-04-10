@@ -2,12 +2,38 @@
 
     class Perfil Extends Controller {
 
+        # Muestra los detalles del perfil antes de eliminar
+        public function render() {
+
+            # Iniciamos o continuamos con la sesión
+            sec_session_start();
+
+            # Capa autentificación
+            if (!isset($_SESSION['id'])) {
+                header("location:".URL. "login");
+            }
+
+            # Capa mensaje
+            if (isset($_SESSION['mensaje'])) {
+                $this->view->mensaje = $_SESSION['mensaje'];
+                unset($_SESSION['mensaje']);
+            }
+
+
+            # Obtenemos objeto con los detalles del usuario
+            $this->view->user = $this->model->getUserId($_SESSION['id']);
+            $this->view->title = 'Perfil de Usuario - Gestión Alumnos PF - MVC';
+
+            $this->view->render('perfil/main/index');
+           
+        }
 
         # Editar los detalles name y email de usuario
         public function edit() {
 
             # Iniciamos o continuamos sesión
             sec_session_start();
+
 
             # Capa de autentificación
             if (!isset($_SESSION['id'])) { 
@@ -44,7 +70,7 @@
 
             }
 
-            $this->view->title = 'Modificar Perfil Usuario';
+            $this->view->title = 'Modificar Perfil Usuario - Gestión Alumnos - FP';
             $this->view->render('perfil/edit/index');
 
 
@@ -55,6 +81,7 @@
 
             # Iniciamos o continuamos con la sesión
             sec_session_start();
+
 
             # Capa autentificación
             if (!isset($_SESSION['id'])) {
@@ -78,7 +105,7 @@
                     $errores['name'] = "Nombre de usuario es obligatorio";
                 } else if ((strlen($name) < 5) || (strlen($name) > 50)) {
                     $errores['name'] = "Nombre de usuario ha de tener entre 5 y 50 caracteres";
-                } else if (!$this->model->validarName($name)) {
+                } else if (!$this->model->validateName($name)) {
                     $errores['name'] = "Nombre de usuario ya ha sido registrado";
                 }
             }
@@ -89,13 +116,13 @@
                     $errores['email'] = "Email es un campo obligatorio";
                 } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $errores['email'] = "Email no válido";
-                } elseif (!$this->model->validarEmail($email)) {
+                } elseif (!$this->model->validateEmail($email)) {
                     $errores['email'] = "Email ya ha sido registrado";
                 }
             }
 
             # Crear objeto user
-            $user = new User(
+            $user = new classUser(
                 $user->id,
                 $name,
                 $email,
@@ -119,7 +146,7 @@
                 $_SESSION['name_user'] = $name;
                 $_SESSION['mensaje'] = 'Usuario modificado correctamente';
 
-                header('location:'.URL.'alumnos');
+                header('location:'.URL.'perfil');
 
             }
 
@@ -131,6 +158,7 @@
             # Iniciamos o continuamos sesión
             sec_session_start();
 
+
             # Capa de autentificación
             if (!isset($_SESSION['id'])) { 
 
@@ -140,10 +168,8 @@
 
             # Comprobamos si existe mensaje
             if (isset($_SESSION['mensaje'])) {
-
                 $this->view->mensaje = $_SESSION['mensaje'];
                 unset($_SESSION['mensaje']);
-
             }
 
             # Capa no validación formulario
@@ -172,6 +198,7 @@
             # Iniciamos o continuamos con la sesión
             sec_session_start();
 
+
             # Capa autentificación
             if (!isset($_SESSION['id'])) {
 
@@ -179,7 +206,7 @@
             }
     
             # Saneamos el formulario
-            $password_actual = filter_var($_POST['password_actual'] ??= null,FILTER_SANITIZE_SPECIAL_CHARS);
+            $password_form = filter_var($_POST['password_actual'] ??= null,FILTER_SANITIZE_SPECIAL_CHARS);
             $password = filter_var($_POST['password'] ??= null,FILTER_SANITIZE_SPECIAL_CHARS);
             $password_confirm = filter_var($_POST['password_confirm'] ??= null,FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -187,11 +214,10 @@
             $user = $this->model->getUserId($_SESSION['id']);
     
             # Validaciones
-    
             $errores = array();
     
             # Validar password actual
-            if (!password_verify($password_actual, $user->password)) { 
+            if (!password_verify($password_form, $user->password)) { 
                     $errores['password_actual'] = "Password actual no es correcto";
             }
     
@@ -215,7 +241,7 @@
             } else {
                 
                 # Crear objeto user
-                $user = new User(
+                $user = new classUser(
                     $user->id,
                     null,
                     null,
@@ -228,39 +254,21 @@
                 $_SESSION['mensaje'] = "Password modificado correctamente";
                 
                 #Vuelve corredores
-                header("location:". URL. "alumnos");
+                header("location:". URL. "perfil");
             }
             
     
     
         }
 
-        # Muestra los detalles del perfil antes de eliminar
-        public function show() {
-
-            # Iniciamos o continuamos con la sesión
-            sec_session_start();
-
-            # Capa autentificación
-            if (!isset($_SESSION['id'])) {
-
-                header("location:".URL. "login");
-            }
-
-
-            # Obtenemos objeto con los detalles del usuario
-            $this->view->user = $this->model->getUserId($_SESSION['id']);
-            $this->view->title = 'Eliminar Perfil Usuario';
-
-            $this->view->render('perfil/delete/index');
-           
-        }
+        
 
         # Elimina definitivamente el perfil
         public function delete() {
 
             # Iniciamos o continuamos con la sesión
             sec_session_start();
+
 
             # Capa autentificación
             if (!isset($_SESSION['id'])) {
@@ -273,7 +281,7 @@
                 $this->model->delete($_SESSION['id']);
 
                 # Destruyo la sesión
-                sec_session_destroy();
+                session_destroy();
 
                 # Salgo de la aplicación
                 header('location:' . URL . 'index');

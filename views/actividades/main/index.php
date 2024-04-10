@@ -61,15 +61,15 @@
                                 <div class="btn-group">
                                 <!-- Eliminar  -->
                                 <a href="<?= URL ?>actividades/eliminar/<?=$actividad->id?>" title="Eliminar" class="btn btn-danger
-                                <?= (!in_array($_SESSION['id_rol'], $GLOBALS['eliminar']))? 'disabled': null ?>" 
+                                <?= (!in_array($_SESSION['id_rol'], $GLOBALS['actividad']['delete']))? 'disabled': null ?>" 
                                 ><i class="bi bi-trash" onclick="return confirm('Confimar elimación del actividad')"></i></a>
                                 <!-- Editar -->
                                 <a href="<?= URL ?>actividades/editar/<?=$actividad->id?>" title="Editar" class="btn btn-primary
-                                <?= (!in_array($_SESSION['id_rol'], $GLOBALS['editar']))? 'disabled': null ?>" 
+                                <?= (!in_array($_SESSION['id_rol'], $GLOBALS['actividad']['edit']))? 'disabled': null ?>" 
                                 ><i class="bi bi-pencil"></i></a>
                                 <!-- Mostrar -->
                                 <a href="<?= URL ?>actividades/mostrar/<?=$actividad->id?>" title="Mostrar" class="btn btn-warning
-                                <?= (!in_array($_SESSION['id_rol'], $GLOBALS['mostrar']))? 'disabled': null ?>" 
+                                <?= (!in_array($_SESSION['id_rol'], $GLOBALS['actividad']['show']))? 'disabled': null ?>" 
                                 ><i class="bi bi-eye"></i></a>
                                 </div>
                             </td>
@@ -77,7 +77,7 @@
                     <?php endforeach; ?>   
                 </tbody>
                 <tfoot>
-                    <tr><td colspan="6">Nº Registros <?= $this->actividades->rowCount() ?></td></tr>
+                    <tr><td colspan="6">Nº Filas <?= $this->actividades->rowCount() ?></td></tr>
                 </tfoot>
             </table>
         </div>

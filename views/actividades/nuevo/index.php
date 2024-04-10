@@ -8,7 +8,7 @@
 
 <body>
     <!-- # Menú Principal fijo arriba -->
-    <?php require_once("template/partials/menu.php") ?>
+    <?php require_once("template/partials/menuAut.php") ?>
 
     <!-- Capa Principal -->
     <div class="container">
@@ -489,7 +489,7 @@
 
 
             <!-- Botones de acción -->
-            <a class="btn btn-secondary" href="<?= URL ?>actividads" role="button">Cancelar</a>
+            <a class="btn btn-secondary" href="<?= URL ?>actividades" role="button">Cancelar</a>
             <button type="reset" class="btn btn-danger">Borrar</button>
             <button type="submit" class="btn btn-primary">Enviar</button>
 

@@ -10,8 +10,8 @@ require_once 'class/user.php';
 require_once 'sesiones/controlsession.php';
 
 require_once 'libs/app.php';
-require_once 'libs/privileges.php';
 require_once 'config/config.php';
+require_once 'config/privileges.php';
 $app = new App();
 
 
