@@ -1,13 +1,19 @@
 <?php
 
-    Class actividadesModel extends Model {
+# Pendiente
+// ValidateDepartamento()
+// ValidateCoordinador()
 
-        # Extraer todos los alumnos
-        public function get() {
+class actividadesModel extends Model
+{
 
-            try {
-                # Plantilla
-                $sql = "
+    # Extraer todos los alumnos
+    public function get()
+    {
+
+        try {
+            # Plantilla
+            $sql = "
                 
                 SELECT 
                 a.id,
@@ -28,35 +34,31 @@
                 idace.departamentos d ON a.departamento_id = d.id
 
                 ";
-                
-                # Conectar con la base de datos
-                $conexion = $this->db->connect();
-               
 
-                # Ejecutamos mediante prepare la consulta SQL
-                $result = $conexion->prepare($sql);
-                $result->setFetchMode(PDO::FETCH_OBJ);
-                $result->execute();
-
-                return $result;
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
 
 
-            } catch (PDOException $e){
+            # Ejecutamos mediante prepare la consulta SQL
+            $result = $conexion->prepare($sql);
+            $result->setFetchMode(PDO::FETCH_OBJ);
+            $result->execute();
 
-                include_once('template/partials/errorDB.php');
-                exit();
-                
-            }
+            return $result;
+        } catch (PDOException $e) {
 
-
+            include_once('template/partials/errorDB.php');
+            exit();
         }
+    }
 
-        # Extraer los cursos 
-        public function getCursos() {
+    # Extraer los cursos 
+    public function getCursos()
+    {
 
-            try {
-                # Plantilla
-                $sql = "
+        try {
+            # Plantilla
+            $sql = "
                 
                     SELECT 
                             id,
@@ -68,37 +70,33 @@
                     ORDER BY id
                 ";
 
-                # Conectar con la base de datos
-                $conexion = $this->db->connect();
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
 
-                # ejecutar PREPARE
-                $result = $conexion->prepare($sql);
+            # ejecutar PREPARE
+            $result = $conexion->prepare($sql);
 
-                # establezco com quiero que devuelva el resultado
-                $result->setFetchMode(PDO::FETCH_OBJ);
+            # establezco com quiero que devuelva el resultado
+            $result->setFetchMode(PDO::FETCH_OBJ);
 
-                # ejecuto
-                $result->execute();
+            # ejecuto
+            $result->execute();
 
-                return $result;
+            return $result;
+        } catch (PDOException $e) {
 
-
-            } catch (PDOException $e){
-
-                include_once('template/partials/errorDB.php');
-                exit();
-                
-            }
-
-
+            include_once('template/partials/errorDB.php');
+            exit();
         }
+    }
 
-        # Extraer los profesores 
-        public function getProfesores() {
+    # Extraer los profesores 
+    public function getProfesores()
+    {
 
-            try {
-                # Plantilla
-                $sql = "
+        try {
+            # Plantilla
+            $sql = "
                 
                     SELECT 
                             id,
@@ -109,37 +107,33 @@
 
                 ";
 
-                # Conectar con la base de datos
-                $conexion = $this->db->connect();
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
 
-                # ejecutar PREPARE
-                $result = $conexion->prepare($sql);
+            # ejecutar PREPARE
+            $result = $conexion->prepare($sql);
 
-                # establezco com quiero que devuelva el resultado
-                $result->setFetchMode(PDO::FETCH_OBJ);
+            # establezco com quiero que devuelva el resultado
+            $result->setFetchMode(PDO::FETCH_OBJ);
 
-                # ejecuto
-                $result->execute();
+            # ejecuto
+            $result->execute();
 
-                return $result;
+            return $result;
+        } catch (PDOException $e) {
 
-
-            } catch (PDOException $e){
-
-                include_once('template/partials/errorDB.php');
-                exit();
-                
-            }
-
-
+            include_once('template/partials/errorDB.php');
+            exit();
         }
+    }
 
-        # Extraer los departamentos 
-        public function getDepartamentos() {
+    # Extraer los departamentos 
+    public function getDepartamentos()
+    {
 
-            try {
-                # Plantilla
-                $sql = "
+        try {
+            # Plantilla
+            $sql = "
                 
                     SELECT 
                             id,
@@ -150,37 +144,33 @@
 
                 ";
 
-                # Conectar con la base de datos
-                $conexion = $this->db->connect();
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
 
-                # ejecutar PREPARE
-                $result = $conexion->prepare($sql);
+            # ejecutar PREPARE
+            $result = $conexion->prepare($sql);
 
-                # establezco com quiero que devuelva el resultado
-                $result->setFetchMode(PDO::FETCH_OBJ);
+            # establezco com quiero que devuelva el resultado
+            $result->setFetchMode(PDO::FETCH_OBJ);
 
-                # ejecuto
-                $result->execute();
+            # ejecuto
+            $result->execute();
 
-                return $result;
+            return $result;
+        } catch (PDOException $e) {
 
-
-            } catch (PDOException $e){
-
-                include_once('template/partials/errorDB.php');
-                exit();
-                
-            }
-
-
+            include_once('template/partials/errorDB.php');
+            exit();
         }
+    }
 
-        # Extraer los departamentos 
-        public function getCategorias() {
+    # Extraer los departamentos 
+    public function getCategorias()
+    {
 
-            try {
-                # Plantilla
-                $sql = "
+        try {
+            # Plantilla
+            $sql = "
                 
                     SELECT 
                             id,
@@ -191,36 +181,32 @@
 
                 ";
 
-                # Conectar con la base de datos
-                $conexion = $this->db->connect();
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
 
-                # ejecutar PREPARE
-                $result = $conexion->prepare($sql);
+            # ejecutar PREPARE
+            $result = $conexion->prepare($sql);
 
-                # establezco com quiero que devuelva el resultado
-                $result->setFetchMode(PDO::FETCH_OBJ);
+            # establezco com quiero que devuelva el resultado
+            $result->setFetchMode(PDO::FETCH_OBJ);
 
-                # ejecuto
-                $result->execute();
+            # ejecuto
+            $result->execute();
 
-                return $result;
+            return $result;
+        } catch (PDOException $e) {
 
-
-            } catch (PDOException $e){
-
-                include_once('template/partials/errorDB.php');
-                exit();
-                
-            }
-
-
+            include_once('template/partials/errorDB.php');
+            exit();
         }
+    }
 
-        public function create(Alumno $alumno) {
+    public function create(Alumno $alumno)
+    {
 
-            try {
+        try {
 
-                $sql = "
+            $sql = "
                     INSERT INTO Alumnos (
                         nombre,
                         apellidos,
@@ -255,17 +241,17 @@
             $pdoSt->bindParam(':id_curso', $alumno->id_curso, PDO::PARAM_INT);
 
             $pdoSt->execute();
-        }  catch (PDOException $e) {
+        } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
             exit();
         }
+    }
 
-        }
+    public function read($id)
+    {
 
-        public function read($id) {
-
-            try {
-                $sql ="
+        try {
+            $sql = "
                         SELECT 
                                 id,
                                 nombre, 
@@ -281,30 +267,29 @@
                                 id = :id
                 ";
 
-                # Conectar con la base de datos
-                $conexion = $this->db->connect();
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
 
-    
-                $pdoSt = $conexion->prepare($sql);
-    
-                $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
-                $pdoSt->setFetchMode(PDO::FETCH_OBJ);
-                $pdoSt->execute();
-                
-                return $pdoSt->fetch();
-    
-            } catch (PDOException $e) {
-                include_once('template/partials/errorDB.php');
-                exit();
-            }
-    
+
+            $pdoSt = $conexion->prepare($sql);
+
+            $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
+            $pdoSt->setFetchMode(PDO::FETCH_OBJ);
+            $pdoSt->execute();
+
+            return $pdoSt->fetch();
+        } catch (PDOException $e) {
+            include_once('template/partials/errorDB.php');
+            exit();
         }
+    }
 
-        public function update(Alumno $alumno, $id) {
+    public function update(Alumno $alumno, $id)
+    {
 
-            try {
+        try {
 
-                $sql = "
+            $sql = "
                 
                 UPDATE alumnos
                 SET
@@ -320,54 +305,50 @@
                 LIMIT 1
                 ";
 
-                $conexion = $this->db->connect();
-                
-                $pdoSt = $conexion->prepare($sql);
+            $conexion = $this->db->connect();
 
-                $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
+            $pdoSt = $conexion->prepare($sql);
 
-                $pdoSt->bindParam(':nombre', $alumno->nombre, PDO::PARAM_STR, 30);
-                $pdoSt->bindParam(':apellidos', $alumno->apellidos, PDO::PARAM_STR, 50);
-                $pdoSt->bindParam(':email', $alumno->email, PDO::PARAM_STR, 50);
-                $pdoSt->bindParam(':poblacion', $alumno->poblacion, PDO::PARAM_STR, 30);
-                $pdoSt->bindParam(':dni', $alumno->dni, PDO::PARAM_STR, 9);
-                $pdoSt->bindParam(':fechaNac', $alumno->fechaNac);
-                $pdoSt->bindParam(':id_curso', $alumno->id_curso, PDO::PARAM_INT);
+            $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
 
-                $pdoSt->execute();
+            $pdoSt->bindParam(':nombre', $alumno->nombre, PDO::PARAM_STR, 30);
+            $pdoSt->bindParam(':apellidos', $alumno->apellidos, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':email', $alumno->email, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':poblacion', $alumno->poblacion, PDO::PARAM_STR, 30);
+            $pdoSt->bindParam(':dni', $alumno->dni, PDO::PARAM_STR, 9);
+            $pdoSt->bindParam(':fechaNac', $alumno->fechaNac);
+            $pdoSt->bindParam(':id_curso', $alumno->id_curso, PDO::PARAM_INT);
 
-        }
-        catch(PDOException $e) {
+            $pdoSt->execute();
+        } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
             exit();
         }
+    }
 
+    public function delete($id)
+    {
+
+        try {
+            $sql = "DELETE FROM alumnos WHERE id = :id limit 1";
+            $conexion = $this->db->connect();
+            $pdoSt = $conexion->prepare($sql);
+            $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
+            $pdoSt->execute();
+        } catch (PDOException $error) {
+
+            include_once('template/partials/errorDB.php');
+            exit();
         }
+    }
 
-        public function delete($id) {
+    # Extraer todos los alumnos
+    public function order($criterio)
+    {
 
-            try {
-                $sql = "DELETE FROM alumnos WHERE id = :id limit 1";
-                $conexion = $this->db->connect();
-                $pdoSt = $conexion->prepare($sql);			          
-                $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
-                $pdoSt->execute();
-            } 
-        
-            catch (PDOException $error) {	
-        
-                include_once('template/partials/errorDB.php');
-                exit();
-            }
-
-        }
-
-         # Extraer todos los alumnos
-         public function order($criterio) {
-
-            try {
-                # Plantilla
-                $sql = "
+        try {
+            # Plantilla
+            $sql = "
                 
                     SELECT a.id,
                         a.nombre,
@@ -381,32 +362,28 @@
                     ORDER BY $criterio
 
                 ";
-                
-                # Conectar con la base de datos
-                $conexion = $this->db->connect();
-               
 
-                # Ejecutamos mediante prepare la consulta SQL
-                $result = $conexion->prepare($sql);
-                $result->setFetchMode(PDO::FETCH_OBJ);
-                $result->execute();
-
-                return $result;
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
 
 
-            } catch (PDOException $e){
+            # Ejecutamos mediante prepare la consulta SQL
+            $result = $conexion->prepare($sql);
+            $result->setFetchMode(PDO::FETCH_OBJ);
+            $result->execute();
 
-                include_once('template/partials/errorDB.php');
-                exit();
-                
-            }
+            return $result;
+        } catch (PDOException $e) {
 
-
+            include_once('template/partials/errorDB.php');
+            exit();
         }
+    }
 
-        public function filter($expresion) {
-            try {
-                $sql = "
+    public function filter($expresion)
+    {
+        try {
+            $sql = "
                 
                 SELECT a.id,
                        a.nombre,
@@ -431,53 +408,76 @@
                         like :expresion
                 ";
 
-                # Conectar con la base de datos
-                $conexion = $this->db->connect();
+            # Conectar con la base de datos
+            $conexion = $this->db->connect();
 
-                $pdoSt = $conexion->prepare($sql);
-                
-                $pdoSt->bindValue(':expresion', '%'.$expresion.'%', PDO::PARAM_STR);
-                $pdoSt->setFetchMode(PDO::FETCH_OBJ);
-                $pdoSt->execute();
-                return $pdoSt;
+            $pdoSt = $conexion->prepare($sql);
 
-            } catch (PDOException $e){
+            $pdoSt->bindValue(':expresion', '%' . $expresion . '%', PDO::PARAM_STR);
+            $pdoSt->setFetchMode(PDO::FETCH_OBJ);
+            $pdoSt->execute();
+            return $pdoSt;
+        } catch (PDOException $e) {
 
-                include_once('template/partials/errorDB.php');
-                exit();
-                
-            }
+            include_once('template/partials/errorDB.php');
+            exit();
+        }
+    }
 
-    } 
-
-    public function validarEmail($email) {
+    public function validateCoordinador($id_coordinador)
+    {
 
         try {
             $sql = "
-                    SELECT * FROM alumnos
-                    WHERE email = :email
+                    SELECT * FROM profesores
+                    WHERE id = :id_coordinador
             ";
 
             # Conectamos con la base de datos
             $conexion = $this->db->connect();
-    
+
             # Ejecutamos mediante prepare la consulta SQL
-            $result= $conexion->prepare($sql);
-            $result->bindParam(':email', $email, PDO::PARAM_STR);
-            $result -> execute();
+            $result = $conexion->prepare($sql);
+            $result->bindParam(':id_coordinador', $id_coordinador, PDO::PARAM_INT);
+            $result->execute();
 
-            if ($result->rowCount() == 1) 
-                    return FALSE;
-            return TRUE;
-
-    } catch(PDOException $e) {
+            if ($result->rowCount() == 1)
+                return TRUE;
+            return FALSE;
+        } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
             exit();
+        }
     }
 
+    public function validateDepartamento($id_departamento)
+    {
+
+        try {
+            $sql = "
+                    SELECT * FROM departamentos
+                    WHERE id = :id_departamento
+            ";
+
+            # Conectamos con la base de datos
+            $conexion = $this->db->connect();
+
+            # Ejecutamos mediante prepare la consulta SQL
+            $result = $conexion->prepare($sql);
+            $result->bindParam(':id_departamento', $id_departamento, PDO::PARAM_INT);
+            $result->execute();
+
+            if ($result->rowCount() == 1)
+                return TRUE;
+            return FALSE;
+        } catch (PDOException $e) {
+            include_once('template/partials/errorDB.php');
+            exit();
+        }
     }
 
-    public function validarDni($dni) {
+    public function validarDni($dni)
+    {
 
         try {
             $sql = "
@@ -487,24 +487,23 @@
 
             # Conectamos con la base de datos
             $conexion = $this->db->connect();
-    
+
             # Ejecutamos mediante prepare la consulta SQL
-            $result= $conexion->prepare($sql);
+            $result = $conexion->prepare($sql);
             $result->bindParam(':dni', $dni, PDO::PARAM_STR);
-            $result -> execute();
+            $result->execute();
 
-            if ($result->rowCount() == 1) 
-                    return FALSE;
+            if ($result->rowCount() == 1)
+                return FALSE;
             return TRUE;
-
-    } catch(PDOException $e) {
+        } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
             exit();
+        }
     }
 
-    }
-
-    public function validarCurso($id_curso) {
+    public function validarCurso($id_curso)
+    {
 
         try {
             $sql = "
@@ -514,23 +513,18 @@
 
             # Conectamos con la base de datos
             $conexion = $this->db->connect();
-    
+
             # Ejecutamos mediante prepare la consulta SQL
-            $result= $conexion->prepare($sql);
+            $result = $conexion->prepare($sql);
             $result->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
-            $result -> execute();
+            $result->execute();
 
-            if ($result->rowCount() == 1) 
-                    return TRUE;
+            if ($result->rowCount() == 1)
+                return TRUE;
             return FALSE;
-
-    } catch(PDOException $e) {
+        } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
             exit();
+        }
     }
-
-    }
-
 }
-
-?>

@@ -12,5 +12,8 @@ define('USER', 'root');
 define('PASSWORD', '');
 define('CHARSET', 'utf8mb4');
 
+# Constante para los cursos
+define('CURSO', '23/24');
+
 
 ?>

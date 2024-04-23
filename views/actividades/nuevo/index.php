@@ -49,7 +49,7 @@
             <!-- Sección Detalles de la actividad -->
             <div class="card">
                 <div class="card-header">
-                    Detalles de la Actividad
+                    <legend>Detalles de la Actividad</legend> 
                 </div>
                 <div class="card-body">
 
@@ -66,8 +66,8 @@
                     </div>
                     <!-- descripcion -->
                     <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Descripción</label>
-                        <textarea class="form-control <?= (isset($this->errores['descripcion'])) ? 'is-invalid' : null ?>" id="exampleFormControlTextarea1" rows="3"><?= $this->actividad->descripcion ?></textarea>
+                        <label for="exampleFormControlTextarea1" class="form-label">Descripción *</label>
+                        <textarea class="form-control <?= (isset($this->errores['descripcion'])) ? 'is-invalid' : null ?>" id="exampleFormControlTextarea1" rows="3" name='descripcion'><?= $this->actividad->descripcion ?></textarea>
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['descripcion'])) : ?>
                             <span class="form-text text-danger" role="alert">
@@ -78,7 +78,7 @@
 
                     <!-- lugar celebración -->
                     <div class="mb-3">
-                        <label for="nombre" class="form-label">Lugar Celebración</label>
+                        <label for="nombre" class="form-label">Lugar Celebración *</label>
                         <input type="text" class="form-control <?= (isset($this->errores['lugar_celebracion'])) ? 'is-invalid' : null ?>" name="lugar_celebracion" value="<?= $this->actividad->lugar_celebracion ?>">
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['lugar_celebracion'])) : ?>
@@ -107,7 +107,7 @@
             <!-- Sección Calendario -->
             <div class="card">
                 <div class="card-header">
-                    Calendario
+                    <legend>Calendario</legend>  
                 </div>
                 <div class="card-body">
 
@@ -154,11 +154,11 @@
                     <div class="mb-3">
                         <label for="jornadas" class="form-label">Trimestre</label>
 
-                        <select class="form-select" aria-label="Default select example" name="eval">
+                        <select class="form-select <?= (isset($this->errores['eval'])) ? 'is-invalid' : null ?>" aria-label="Default select example" name="eval" >
                             <option selected disabled>Seleccione trimestre</option>
-                            <option value="1">1º Trimestre</option>
-                            <option value="2">2º Trimestre</option>
-                            <option value="3">3º Trimestre</option>
+                            <option value="1" <?= ($this->actividad->eval == 1) ? 'selected' : null ?>>1º Trimestre</option>
+                            <option value="2" <?= ($this->actividad->eval == 2) ? 'selected' : null ?>>2º Trimestre</option>
+                            <option value="3" <?= ($this->actividad->eval == 3) ? 'selected' : null ?>>3º Trimestre</option>
                         </select>
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['eval'])) : ?>
@@ -176,10 +176,11 @@
             <!-- Sección Horarios -->
             <div class="card">
                 <div class="card-header">
-                    Horarios
+                    <legend>Horarios</legend>   
                 </div>
                 <div class="card-body">
-
+                    Para especificar el horario use alguna de las siguientes opciones
+                    <br> <br>
                     <!-- hora de inicio-->
                     <div class="mb-3">
                         <label for="hora_inicio" class="form-label">Hora de inicio</label>
@@ -194,8 +195,8 @@
 
                     <!-- hora de fin -->
                     <div class="mb-3">
-                        <label for="hora_fin" class="form-label">Horarios</label>
-                        <input type="time" class="form-control <?= (isset($this->errores['hora_fin'])) ? 'is-invalid' : null ?>" name="hora_inicio" value="<?= $this->actividad->hora_inicio ?>">
+                        <label for="hora_fin" class="form-label">Hora de fin</label>
+                        <input type="time" class="form-control <?= (isset($this->errores['hora_fin'])) ? 'is-invalid' : null ?>" name="hora_fin" value="<?= $this->actividad->hora_fin ?>">
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['hora_fin'])) : ?>
                             <span class="form-text text-danger" role="alert">
@@ -221,18 +222,20 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 <tr>
                                     <td scope="col">Tramo Horario</td>
                                     <?php for ($i = 1; $i <= 7; $i++) : ?>
                                         <td>
-                                            <input class="form-check-input" type="checkbox" value="<?= $i ?>" id="flexCheckDefault" name="tramo_horario[]">
+                                            <input class="form-check-input" type="checkbox" value="<?= $i ?>" id="flexCheckDefault" name="tramo_horario[]" <?= in_array($i, $this->actividad->tramo_horario) ? 'checked' : null ?>>
                                         </td>
                                     <?php endfor; ?>
                                 </tr>
+                                <tr><td colspan="8">-</td> </tr>
                                 <tr>
                                     <td scope="col">Día Completo</td>
                                     <td colspan="7">
-                                        <input class="form-check-input" type="checkbox" value="<?= $this->actividad->dia_completo ?>" id="flexCheckDefault" name="dia_completo" colspan=6>
+                                        <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault" name="dia_completo" <?= ($this->actividad->dia_completo) ? 'checked' : null ?> colspan=6>
                                     </td>
                                 </tr>
                             </tbody>
@@ -241,7 +244,7 @@
 
                     <!-- horas grupo -->
                     <div class="mb-3">
-                        <label for="horas_lectivas" class="form-label">Horas Lectivas (por grupo)</label>
+                        <label for="horas_lectivas" class="form-label">Horas Lectivas (por grupo) *</label>
                         <input type="number" step="0.1" class="form-control <?= (isset($this->errores['horas_lectivas'])) ? 'is-invalid' : null ?>" name="horas_lectivas" value="<?= $this->actividad->horas_lectivas ?>">
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['horas_lectivas'])) : ?>
@@ -285,7 +288,7 @@
 
                                         if ($nivel_a == $curso->nivel) : ?>
                                             <td>
-                                                <input class="form-check-input" type="checkbox" value="<?= $curso->curso ?>" id="flexCheckDefault" name="cursos[]">
+                                                <input class="form-check-input" type="checkbox" value="<?= $curso->curso ?>" id="flexCheckDefault" name="cursos[]" <?= (in_array($curso->curso, $this->actividad->cursos))? 'checked': null ?>>
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     <?= $curso->curso ?>
                                                 </label>
@@ -319,7 +322,7 @@
                     <!-- observaciones cursos horario -->
                     <div class="mb-3">
                         <label for="titulo" class="form-label">Observaciones Cursos Tramo Horario</label>
-                        <textarea class="form-control <?= (isset($this->errores['observaciones_cursos_horas'])) ? 'is-invalid' : null ?>" id="exampleFormControlTextarea1" rows="2"><?= $this->actividad->observaciones_cursos_horas ?></textarea>
+                        <textarea class="form-control <?= (isset($this->errores['observaciones_cursos_horas'])) ? 'is-invalid' : null ?>" id="exampleFormControlTextarea1" rows="2" name='observaciones_cursos_horas'><?= $this->actividad->observaciones_cursos_horas ?></textarea>
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['observaciones_cursos_horas'])) : ?>
                             <span class="form-text text-danger" role="alert">
@@ -330,7 +333,7 @@
 
                     <!-- número de alumnos -->
                     <div class="mb-3">
-                        <label for="num_alumnos" class="form-label">Número Alumnos (Aprox)</label>
+                        <label for="num_alumnos" class="form-label">Número Alumnos (Aprox) *</label>
                         <input type="number" class="form-control <?= (isset($this->errores['num_alumnos'])) ? 'is-invalid' : null ?>" name="num_alumnos" value="<?= $this->actividad->num_alumnos ?>">
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['num_alumnos'])) : ?>
@@ -352,7 +355,7 @@
 
                     <!-- coordinador -->
                     <div class="mb-3">
-                        <label for="" class="form-label">Coordinación</label>
+                        <label for="" class="form-label">Coordinación *</label>
                         <select class="form-select <?= (isset($this->errores['coordinador_id'])) ? 'is-invalid' : null ?>" name="coordinador_id">
                             <option selected disabled>Seleccine Coordinador/a</option>
                             <?php foreach ($this->profesores as $profesor) : ?>
@@ -369,8 +372,8 @@
 
                     <!-- departamento -->
                     <div class="mb-3">
-                        <label for="" class="form-label">Departamento</label>
-                        <select class="form-select<?= (isset($this->errores['departamento_id'])) ? 'is-invalid' : null ?>" name="departamento_id">
+                        <label for="" class="form-label">Departamento *</label>
+                        <select class="form-select <?= (isset($this->errores['departamento_id'])) ? 'is-invalid' : null ?>" name="departamento_id">
                             <option selected disabled>Seleccine Departamento</option>
                             <?php foreach ($this->departamentos as $departamento) : ?>
                                 <option value="<?= $departamento->id ?>" <?= ($this->actividad->departamento_id == $departamento->id) ? 'selected' : null ?>><?= $departamento->departamento ?></option>
@@ -465,7 +468,7 @@
                     <!-- observaciones actividades -->
                     <div class="mb-3">
                         <label for="titulo" class="form-label">Observaciones Generales</label>
-                        <textarea class="form-control <?= (isset($this->errores['observaciones'])) ? 'is-invalid' : null ?>" id="exampleFormControlTextarea1" rows="2"><?= $this->actividad->observaciones ?></textarea>
+                        <textarea class="form-control <?= (isset($this->errores['observaciones'])) ? 'is-invalid' : null ?>" id="exampleFormControlTextarea1" rows="2" name='observaciones'><?= $this->actividad->observaciones ?></textarea>
                         <!-- Mostrar posible error -->
                         <?php if (isset($this->errores['observaciones'])) : ?>
                             <span class="form-text text-danger" role="alert">
@@ -474,10 +477,19 @@
                         <?php endif; ?>
                     </div>
 
+                    <!-- campo oculto validar tamaño archivo 2MB -->
+                    <input type="hidden" name="MAX_FILE_SIZE" value="2097152">
+
                     <!-- Adjuntar Archivos -->
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Adjuntar Archivos</label>
-                        <input class="form-control" type="file" id="formFile" name="files[]" multiple>
+                        <input class="form-control <?= (isset($this->errores['files'])) ? 'is-invalid' : null ?>" type="file" id="formFile" name="files[]" multiple accept=".jpg, .jpeg, .png, .gif, .pdf">
+                        <!-- Mostrar posible error -->
+                        <?php if (isset($this->errores['files'])) : ?>
+                            <span class="form-text text-danger" role="alert">
+                                <?= $this->errores['files'] ?>
+                            </span>
+                        <?php endif; ?>
                     </div>
 
                     

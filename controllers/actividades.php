@@ -72,7 +72,7 @@ class Actividades extends Controller
                 unset($_SESSION['errores']);
             }
 
-            
+
 
             # título de la vista
             $this->view->title = "DACE - Formulario Planificación Actividades";
@@ -98,8 +98,6 @@ class Actividades extends Controller
 
             # carge la vista nuevo formulario
             $this->view->render('actividades/nuevo/index');
-
-           
         }
     }
 
@@ -136,16 +134,16 @@ class Actividades extends Controller
             $eval = filter_var($_POST['eval'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
 
             # horario
-            $hora_inicio = filter_var($_POST['hora_incio'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $hora_inicio = filter_var($_POST['hora_inicio'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $hora_fin = filter_var($_POST['hora_fin'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
-            $tramo_horario = filter_var($_POST['tramo_horario'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $tramo_horario = $_POST['tramo_horario'] ??= [];
             $dia_completo = filter_var($_POST['dia_completo'] ??= '', FILTER_SANITIZE_NUMBER_INT);
             $horas_lectivas = filter_var($_POST['horas_lectivas'] ??= '', FILTER_SANITIZE_NUMBER_FLOAT);
 
 
             # alumnos
 
-            $cursos = filter_var($_POST['cursos'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $cursos = $_POST['cursos'] ??= [];
             $num_alumnos = filter_var($_POST['num_alumnos'] ??= '', FILTER_SANITIZE_NUMBER_INT);
             $observaciones_cursos_horas = filter_var($_POST['observaciones_cursos_horas'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -157,14 +155,14 @@ class Actividades extends Controller
             $colaboracion_coordinador = filter_var($_POST['colaboracion_coordinador'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
 
             # final
-
+            $ficheros = $_FILES['files'] ??= [];
             $observaciones = filter_var($_POST['observaciones'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
 
             # 2. Creamos el objeto alumno con los datos saneados
-            $new_actividad = new Actividad(
+            $actividad = new Actividad(
                 null,
                 null,
-                '23/24',
+                CURSO,
                 $titulo,
                 $descripcion,
                 $jornadas,
@@ -195,12 +193,23 @@ class Actividades extends Controller
                 $nombre
             );
 
-            var_dump($new_actividad);
-            exit();
-
             # 3. Validación de los datos
 
             $errores = [];
+
+            // Validamos nombre
+            // - Valor obligatorio
+            if (empty($nombre)) {
+                $errores['nombre'] = 'Campo obligatorio';
+            }
+
+            // Validamos email
+            // - Verificar obligatorio, formato email válido
+            if (empty($email)) {
+                $errores['email'] = 'Campo obligatorio';
+            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errores['email'] = 'Email incorrecto';
+            }
 
             // Validación del título
             // - campo obligatorio
@@ -208,60 +217,155 @@ class Actividades extends Controller
                 $errores['titulo'] = 'Campo obligatorio';
             }
 
-            // Validamos nombre
-            // Valor obligatorio
-            if (empty($nombre)) {
-                $errores['nombre'] = 'Campo obligatorio';
+            // Validación de la descripción
+            // - campo obligatorio
+            if (empty($descripcion)) {
+                $errores['descripcion'] = 'Es necesario especificar una descripción corta de la actividad';
             }
 
-            // Validamos apellidos
-            // Valor obligatorio
-            if (empty($apellidos)) {
-                $errores['apellidos'] = 'Campo obligatorio';
+            // Validación del lugar celebración
+            // - campo obligatorio
+            if (empty($lugar_celebracion)) {
+                $errores['lugar_celebracion'] = 'Campo obligatorio';
             }
 
-            // Validamos población
-            // Campo opcional
+            // Validación de la especialidad
+            // - campo no obligatorio
 
-            // Validamos email
-            // Verificar obligatorio, email, único
-            if (empty($email)) {
-                $errores['email'] = 'Campo obligatorio';
-            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errores['email'] = 'Email incorrecto';
-            } else if (!$this->model->validarEmail($email)) {
-                $errores['email'] = 'Email registrado';
+
+            // Validación jornadas
+            // - campo obligatorio
+            if (empty($jornadas)) {
+                $errores['jornadas'] = 'Campo obligatorio';
+            } else if (!filter_var($jornadas, FILTER_VALIDATE_INT)) {
+                $errores['jornadas'] = 'Introducir número entero';
             }
 
-            // Validamos fecha nacimiento
-            // Campo obligatorio
-            if (empty($fechaNac)) {
-                $errores['fechaNac'] = 'Campo obligatorio';
+            // Validamos fecha inicio
+            // - Campo obligatorio
+            if (empty($fecha_inicio)) {
+                $errores['fecha_inicio'] = 'Campo obligatorio';
             }
 
-            // Validamos dni
-            // Verificar obligatorio, formato dni, único
-            $options = [
-                'options' => [
-                    'regexp' => '/^(\d{8})([A-Z])$/'
-                ]
-            ];
-            if (empty($dni)) {
-                $errores['dni'] = 'Campo obligatorio';
-            } else if (!filter_var($dni, FILTER_VALIDATE_REGEXP, $options)) {
-                $errores['dni'] = 'DNI con formato incorrecto';
-            } else if (!$this->model->validarDNI($dni)) {
-                $errores['dni'] = 'DNI ya ha sido registrado';
+            // Validamos fecha fin
+            // - Campo no obligatorio
+
+            // Validamos eval (trimestre en la que se celebra la actividad)
+            // - Campo obligatorio
+            if (empty($eval)) {
+                $errores['eval'] = 'Campo obligatorio';
+            } else if (!in_array($eval, [1, 2, 3])) {
+                $errores['eval'] = 'Seleccione trimestre válido';
             }
 
-            // Validamos id_curso
-            // Verificar obligatorio, entero, existe
-            if (empty($id_curso)) {
-                $errores['id_curso'] = 'Campo obligatorio';
-            } else if (!filter_var($id_curso, FILTER_VALIDATE_INT)) {
-                $errores['id_curso'] = 'Curso no válido';
-            } else if (!$this->model->validarCurso($id_curso)) {
-                $errores['id_curso'] = 'Curso no existe';
+            // Validación horarios
+            // - hora_inicio
+            // - hora_fin
+            // - tramo_horario
+            // - horas_lectivas
+            if (empty($horas_lectivas)) {
+                $errores['horas_lectivas'] = 'Campo obligatorio';
+            } else if (!filter_var($horas_lectivas, FILTER_VALIDATE_INT)) {
+                $errores['horas_lectivas'] = 'Puedes introducir número con 1 posición decimal';
+            }
+
+            // Validación cursos
+            // - campo no obligatorio
+
+            // Validacion observaciones_cursos_horas
+            // - campo no obligatorio
+
+            // Validación num_alumnos
+            // - campo obligatorio
+            // - campo entero
+            if (empty($jornadas)) {
+                $errores['num_alumnos'] = 'Campo obligatorio';
+            } else if (!filter_var($num_alumnos, FILTER_VALIDATE_INT)) {
+                $errores['num_alumnos'] = 'Introducir número entero';
+            }
+
+            // Validación coordinador_id
+            // - campo obligatorio
+            // - valor válido relacionado con la tabla profesores
+            if (empty($coordinador_id)) {
+                $errores['coordinador_id'] = 'Debe seleccionar un coordinador';
+            } else if (!filter_var($coordinador_id, FILTER_VALIDATE_INT)) {
+                $errores['coordinador_id'] = 'Coordinador no válido';
+            } else if (!$this->model->validateCoordinador($coordinador_id)) {
+                $errores['coordinador_id'] = 'Seleccionar un coordinador válido';
+            }
+
+            // Validación departamento_id
+            // - campo obligatorio
+            // - valor válido relacionado con la tabla departamentos
+            if (empty($departamento_id)) {
+                $errores['departamento_id'] = 'Debe seleccionar un departamento';
+            } else if (!filter_var($departamento_id, FILTER_VALIDATE_INT)) {
+                $errores['departamento_id'] = 'Departamento no válido';
+            } else if (!$this->model->validateDepartamento($departamento_id)) {
+                $errores['departamento_id'] = 'Seleccionar un departamento válido';
+            }
+
+            // Validación profesores_participantes
+            // - campo opcional
+
+            // Validación que_hacen_afectados
+            // - campo opcional
+
+            // Validación colaboracion_coordinador
+            // - campo opcional
+
+            // Validación observaciones
+            // - campo opcional
+
+            // Validación files
+            // - campo opcional
+            // - tipos ficheros admitidos: 
+            //    - Imagen: jpg, jpeg, png, gif
+            //    - Pdf
+            //    - Texto: 
+
+            # genero array de error de fichero
+            $FileUploadErrors = array(
+                0 => 'No hay error, fichero subido con éxito.',
+                1 => 'El fichero subido excede la directiva upload_max_filesize de php.ini.',
+                2 => 'El fichero subido excede la directiva MAX_FILE_SIZE especificada en el formulario HTML.',
+                3 => 'El fichero fue sólo parcialmente subido.',
+                4 => 'No se subió ningún fichero.',
+                6 => 'Falta la carpeta temporal.',
+                7 => 'No se pudo escribir el fichero en el disco.',
+                8 => 'Una extensión de PHP detuvo la subida de ficheros.',
+            );
+
+            if (!empty($ficheros['name'][0])) {
+
+                # Validar número de archivos subidos
+
+                # Validar todos los archivos
+                foreach ($ficheros['name'] as $index => $nombreArchivo) {
+                    # Comprobar si hay errores
+                    if ($ficheros['error'][$index] !== UPLOAD_ERR_OK) {
+                        $errores['files'] = $FileUploadErrors[$ficheros['error'][$index]];
+                        break;
+                    } else {
+                        # Validar el tamaño máximo
+                        $maxSize = 2 * 1024 * 1024; // 2 MB
+                        if ($ficheros['size'][$index] > $maxSize) {
+                            $errores['files'] = "El tamaño excede de 2MB.";
+                            break;
+                        }
+
+                        # Validar el tipo de archivo
+                        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'docx'];
+                        $fileInfo = new SplFileInfo($nombreArchivo);
+                        $extension = $fileInfo->getExtension();
+
+                        if (!in_array(strtolower($extension), $allowedExtensions)) {
+                            $errores['files'] = "Tipos de archivos válidos JPG, JPEG, PNG, PDF";
+                            break;
+                        }
+                    }
+                }
             }
 
             # 4. Comprobar validación
@@ -273,139 +377,28 @@ class Actividades extends Controller
                 //exit();
 
                 // Si $errores no está vacio el formulario no ha sido validado
-                $_SESSION['alumno'] = serialize($new_alumno);
-                $_SESSION['error'] = 'Formulario no ha sido validado';
+                $_SESSION['actividad'] = serialize($actividad);
+                $_SESSION['error'] = 'Debe repasar el formulario, NO HA SIDO VALIDADO';
                 $_SESSION['errores'] = $errores;
 
                 # Redireccionamos a nuevo alumno
 
-                header('location:' . URL . 'alumnos/nuevo');
+                header('location:' . URL . 'actividades/nuevo');
             } else {
 
+                # Mostrar actividad
+                var_dump($actividad);
+                exit();
+
                 # Crear alumno
-                $this->model->create($new_alumno);
+                $this->model->create($actividad);
 
                 # Crear mensaje
-                $_SESSION['mensaje'] = 'Alumno creado correctamente';
+                $_SESSION['mensaje'] = 'Actividad creada correctamente';
 
                 # Redireccionamos 
-                header('location:' . URL . 'alumnos');
+                header('location:' . URL . 'actividades');
             }
         }
     }
-
-    /*
-         function new() {
-
-            # Iniciar o continuar sesión segura
-            sec_session_start();
-
-            # Inicializo los valores del formulario
-            $this->view->actividad = new Actividad();
-
-            # Control de los mensajes
-            if (isset($_SESSION['mensaje'])) {
-
-                $this->view->mensaje = $_SESSION['mensaje'];
-                unset($_SESSION['mensaje']);
-
-            }
-
-            # Control de errores
-            if (isset($_SESSION['error'])) {
-
-                $this->view->error = $_SESSION['error'];
-                unset($_SESSION['error']);
-
-                # Autocompleto los valores del formulario
-                $this->view->actividad = unserialize($_SESSION['actividad']);
-                unset($_SESSION['actividad']);
-
-                # Tipo de error
-                $this->view->errores = $_SESSION['errores'];
-                unset($_SESSION['errores']);
-
-            }
-
-            $this->view->render('aut/login/index');
-        }
-
-        # 
-        # Validación actividad
-        #
-         function create() {
-
-            # Inicio o reanudación de sessión
-            sec_session_start();
-
-            # Saneamos el formulario
-            $email = filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
-	        $password = filter_var($_POST['password'],FILTER_SANITIZE_SPECIAL_CHARS);
-
-            # Validaciones
-
-            $errores = array();
-
-            #obtengo el usuario a partir del email
-	        $user = $this->model->getUserEmail($email);
-
-            if ($user === false) {
-
-                $errores['email'] = "Email no ha sido registrado";
-                $_SESSION['errores'] = $errores;
-                
-                $_SESSION['email'] = $email;
-                $_SESSION['password'] = $password;
-                
-                $_SESSION['error'] = "Fallo en la Autentificación";
-
-                header("location:". URL. "login"); 
-                
-            } else if (!password_verify($password,$user->password)) {
-
-                $errores['password'] = "Password no es correcto";
-                $_SESSION['errores'] = $errores;
-
-                $_SESSION['email'] = $email;
-                $_SESSION['password'] = $password;
-
-                $_SESSION['error'] = "Fallo en la Autentificación";
-
-                header("location:". URL. "login"); 
-                
-            } else {
-                
-                # Autentificación completada
-
-                # Borramos todas las variables de sesión
-                session_unset();
-
-                # Destruimos cookie sesión
-                if (ini_get("session.use_cookies")) {
-                    $params = session_get_cookie_params();
-                    setcookie(session_name(), '', time() - 42000,
-                        $params["path"], $params["domain"],
-                        $params["secure"], $params["httponly"]
-                    );
-                }
-
-                # Destruimos la sesión
-                sec_session_destroy();
-
-                # Iniciamos sesión segura
-                sec_session_start();
-                
-                $_SESSION['id'] = $user->id; 
-                $_SESSION['name_user'] = $user->name;
-                $_SESSION['id_rol'] = $this->model->getUserIdPerfil($user->id);
-                $_SESSION['name_rol'] = $this->model->getUserPerfil($_SESSION['id_rol']);
-
-                $_SESSION['mensaje'] = "Usuario ". $user->name. " ha iniciado sesión" ;
-                
-                header("location:". URL. "alumnos");
-            }
-
-
-        }
-        */
 }
