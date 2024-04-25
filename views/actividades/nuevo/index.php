@@ -1,3 +1,4 @@
+<?php var_dump($this->actividad->cursos); ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -288,7 +289,8 @@
 
                                         if ($nivel_a == $curso->nivel) : ?>
                                             <td>
-                                                <input class="form-check-input" type="checkbox" value="<?= $curso->curso ?>" id="flexCheckDefault" name="cursos[]" <?= (in_array($curso->curso, $this->actividad->cursos))? 'checked': null ?>>
+                                                <input class="form-check-input" type="checkbox" value="<?= $curso->curso ?>" id="flexCheckDefault" name="cursos[]"
+                                                <?= in_array($curso->curso, $this->actividad->cursos, true) ? 'checked' : null ?>>
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     <?= $curso->curso ?>
                                                 </label>
@@ -298,13 +300,15 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input class="form-check-input" type="checkbox" value="<?= $curso->nivel ?>" id="flexCheckDefault" name="cursos[]">
+                                        <input class="form-check-input" type="checkbox" value="<?= $curso->nivel ?>" id="flexCheckDefault" name="cursos[]"
+                                        <?= in_array($curso->nivel, $this->actividad->cursos, true) ? 'checked' : null ?>>
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <?= $curso->nivel ?>
                                         </label>
                                     </td>
                                     <td>
-                                        <input class="form-check-input" type="checkbox" value="<?= $curso->curso ?>" id="flexCheckDefault" name="cursos[]">
+                                        <input class="form-check-input" type="checkbox" value="<?= $curso->curso ?>" id="flexCheckDefault" name="cursos[]"
+                                        <?= in_array($curso->curso, $this->actividad->cursos, true) ? 'checked' : null ?>>
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <?= $curso->curso ?>
                                         </label>
