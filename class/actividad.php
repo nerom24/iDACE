@@ -40,6 +40,7 @@
         public $coordinador_id;
         public $email;
         public $nombre;
+        public $user_id;
 
 
 
@@ -65,7 +66,7 @@
             $lugar_celebracion              = null,
             $colaboracion_coordinador       = null,
             $colaboracion_departamentos     = null,
-            $profesores_participantes       = null,
+            $profesores_participantes       = [],
             $que_hacen_afectados            = null,
             $observaciones                  = null,
             $adjuntos                       = null,
@@ -74,7 +75,8 @@
             $departamento_id                = null,
             $coordinador_id                 = null,
             $email                          = null,
-            $nombre                         = null
+            $nombre                         = null,
+            $user_id                        = null
         ) {
             $this->id                             = $id;
             $this->num_actividad                  = $num_actividad;
@@ -107,6 +109,7 @@
             $this->coordinador_id                 = $coordinador_id;
             $this->email                          = $email;
             $this->nombre                         = $nombre;
+            $this->user_id                        = $user_id;
         }
 
 

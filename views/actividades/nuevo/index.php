@@ -54,6 +54,27 @@
                 </div>
                 <div class="card-body">
 
+                    <!-- estado actividad -->
+                    <div class="mb-3">
+                        <label for="" class="form-label">Seleccione Estado de la Actividad</label>
+                        <select class="form-select<?= (isset($this->errores['estado'])) ? 'is-invalid' : null ?>" name="estado">
+                            <option selected disabled>Seleccine Estado</option>
+                            <option value="Borrador" <?= ($this->actividad->estado == 'Borrador') ? 'selected' : null ?>>Borrador</option>
+                            <option value="Planificado" <?= ($this->actividad->estado == 'Planificado') ? 'selected' : null ?>>Planificado</option>
+                            <option value="Validado" <?= ($this->actividad->estado == 'Validado') ? 'selected' : null ?>>Validado</option>
+                            <option value="Difundido" <?= ($this->actividad->estado == 'Difundido') ? 'selected' : null ?>>Difundido</option>
+                            <option value="Cancelado" <?= ($this->actividad->estado == 'Cancelado') ? 'selected' : null ?>>Cancelado</option>
+                            <option value="Celebrado" <?= ($this->actividad->estado == 'Celebrado') ? 'selected' : null ?>>Celebrado</option>
+                        </select>
+
+                        <!-- Mostrar posible error -->
+                        <?php if (isset($this->errores['estado'])) : ?>
+                            <span class="form-text text-danger" role="alert">
+                                <?= $this->errores['estado'] ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+
                     <!-- titulo -->
                     <div class="mb-3">
                         <label for="titulo" class="form-label">Título *</label>
@@ -314,8 +335,8 @@
                                         </label>
                                     </td>
                             <?php
-                                            $nivel_a = $curso->nivel;
-                                        endif;
+                                    $nivel_a = $curso->nivel;
+                                    endif;
                                     endforeach;
 
                             ?>
@@ -404,7 +425,8 @@
 
 
                                         <td>
-                                            <input class="form-check-input" type="checkbox" value="<?= $profesor->id ?>" id="flexCheckDefault" name="profesores_participantes[]">
+                                            <input class="form-check-input" type="checkbox" value="<?= $profesor->profesor ?>" id="flexCheckDefault" name="profesores_participantes[]"
+                                            <?= in_array($profesor->profesor, $this->actividad->profesores_participantes, true) ? 'checked' : null ?>>
                                             <label class="form-check-label" for="flexCheckDefault">
                                                 <?= $profesor->profesor ?>
                                             </label>

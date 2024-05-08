@@ -7,7 +7,7 @@
 class actividadesModel extends Model
 {
 
-    # Extraer todos los alumnos
+    # Extraer todos los actividads
     public function get()
     {
 
@@ -201,29 +201,77 @@ class actividadesModel extends Model
         }
     }
 
-    public function create(Alumno $alumno)
+    public function create(Actividad $actividad)
     {
 
         try {
 
             $sql = "
-                    INSERT INTO Alumnos (
-                        nombre,
-                        apellidos,
-                        email,
-                        poblacion,
-                        dni,
-                        fechaNac,
-                        id_curso
+                    INSERT INTO Actividades (
+                       num_actividad,
+                       curso, 
+                       titulo,
+                       descripcion,
+                       jornadas,
+                       fecha_inicio,
+                       fecha_fin,
+                       hora_inicio,
+                       hora_fin,
+                       dia_completo,
+                       horas_lectivas,
+                       eval,
+                       cursos,
+                       observaciones_cursos_horas,
+                       especialidad,
+                       tramo_horario,
+                       num_alumnos,
+                       lugar_celebracion,
+                       colaboracion_coordinador,
+                       colaboracion_departamentos,
+                       profesores_participantes,
+                       que_hacen_afectados,
+                       observaciones,
+                       adjuntos,
+                       categorias,
+                       estado,
+                       departamento_id,
+                       coordinador_id,
+                       email,
+                       nombre,
+                       user_id
                     )
                     VALUES (
-                        :nombre,
-                        :apellidos,
-                        :email,
-                        :poblacion,
-                        :dni,
-                        :fechaNac,
-                        :id_curso
+                       :num_actividad,
+                       :curso, 
+                       :titulo,
+                       :descripcion,
+                       :jornadas,
+                       :fecha_inicio,
+                       :fecha_fin,
+                       :hora_inicio,
+                       :hora_fin,
+                       :dia_completo,
+                       :horas_lectivas,
+                       :eval,
+                       :cursos,
+                       :observaciones_cursos_horas,
+                       :especialidad,
+                       :tramo_horario,
+                       :num_alumnos,
+                       :lugar_celebracion,
+                       :colaboracion_coordinador,
+                       :colaboracion_departamentos,
+                       :profesores_participantes,
+                       :que_hacen_afectados,
+                       :observaciones,
+                       :adjuntos,
+                       :categorias,
+                       :estado,
+                       :departamento_id,
+                       :coordinador_id,
+                       :email,
+                       :nombre,
+                       :user_id
                     )
             ";
 
@@ -232,14 +280,38 @@ class actividadesModel extends Model
 
             $pdoSt = $conexion->prepare($sql);
 
-            $pdoSt->bindParam(':nombre', $alumno->nombre, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':apellidos', $alumno->apellidos, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':email', $alumno->email, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':poblacion', $alumno->poblacion, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':dni', $alumno->dni, PDO::PARAM_STR, 9);
-            $pdoSt->bindParam(':fechaNac', $alumno->fechaNac);
-            $pdoSt->bindParam(':id_curso', $alumno->id_curso, PDO::PARAM_INT);
-
+            $pdoSt->bindParam(':num_actividad', $actividad->num_actividad, PDO::PARAM_INT);
+            $pdoSt->bindParam(':curso', $actividad->curso, PDO::PARAM_STR, 5);
+            $pdoSt->bindParam(':titulo', $actividad->titulo, PDO::PARAM_STR);
+            $pdoSt->bindParam(':descripcion', $actividad->descripcion, PDO::PARAM_STR);
+            $pdoSt->bindParam(':jornadas', $actividad->jornadas, PDO::PARAM_INT);
+            $pdoSt->bindParam(':fecha_inicio', $actividad->fecha_inicio);
+            $pdoSt->bindParam(':fecha_fin', $actividad->fecha_fin);
+            $pdoSt->bindParam(':hora_inicio', $actividad->hora_inicio);
+            $pdoSt->bindParam(':hora_fin', $actividad->hora_fin);
+            $pdoSt->bindParam(':dia_completo', $actividad->dia_completo, PDO::PARAM_INT);
+            $pdoSt->bindParam(':horas_lectivas', $actividad->horas_lectivas, PDO::PARAM_INT);
+            $pdoSt->bindParam(':eval', $actividad->eval, PDO::PARAM_STR, 1);
+            $pdoSt->bindParam(':cursos', implode('; ', $actividad->cursos), PDO::PARAM_STR, 255);
+            $pdoSt->bindParam(':observaciones_cursos_horas', $actividad->observaciones_cursos_horas, PDO::PARAM_STR, 255);
+            $pdoSt->bindParam(':especialidad', $actividad->especialidad, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':tramo_horario', implode('; ', $actividad->tramo_horario), PDO::PARAM_STR, 20);
+            $pdoSt->bindParam(':num_alumnos', $actividad->num_alumnos, PDO::PARAM_INT);
+            $pdoSt->bindParam(':lugar_celebracion', $actividad->lugar_celebracion, PDO::PARAM_STR, 100);
+            $pdoSt->bindParam(':colaboracion_coordinador', $actividad->colaboracion_coordinador, PDO::PARAM_STR, 255);
+            $pdoSt->bindParam(':colaboracion_departamentos', $actividad->colaboracion_departamentos, PDO::PARAM_STR, 255);
+            $pdoSt->bindParam(':profesores_participantes', implode('; ', $actividad->profesores_participantes), PDO::PARAM_STR);
+            $pdoSt->bindParam(':que_hacen_afectados', $actividad->que_hacen_afectados, PDO::PARAM_STR);
+            $pdoSt->bindParam(':observaciones', $actividad->observaciones, PDO::PARAM_STR);
+            $pdoSt->bindParam(':adjuntos', $actividad->adjuntos, PDO::PARAM_STR, 255);
+            $pdoSt->bindParam(':categorias', $actividad->categorias, PDO::PARAM_STR, 255);
+            $pdoSt->bindParam(':estado', $actividad->estado, PDO::PARAM_STR);
+            $pdoSt->bindParam(':departamento_id', $actividad->departamento_id, PDO::PARAM_INT);
+            $pdoSt->bindParam(':coordinador_id', $actividad->coordinador_id, PDO::PARAM_INT);
+            $pdoSt->bindParam(':email', $actividad->email, PDO::PARAM_STR, 100);
+            $pdoSt->bindParam(':nombre', $actividad->nombre, PDO::PARAM_STR, 100);
+            $pdoSt->bindParam(':user_id', $actividad->user_id, PDO::PARAM_INT);
+            # Insertar actividad    
             $pdoSt->execute();
         } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
@@ -255,14 +327,14 @@ class actividadesModel extends Model
                         SELECT 
                                 id,
                                 nombre, 
-                                apellidos,
-                                email,
+                                curso,
+                                titulo,
                                 poblacion,
-                                dni,
+                                jornadas,
                                 fechaNac,
                                 id_curso
                         FROM 
-                                alumnos
+                                actividads
                         WHERE
                                 id = :id
                 ";
@@ -284,20 +356,20 @@ class actividadesModel extends Model
         }
     }
 
-    public function update(Alumno $alumno, $id)
+    public function update(actividad $actividad, $id)
     {
 
         try {
 
             $sql = "
                 
-                UPDATE alumnos
+                UPDATE actividads
                 SET
                         nombre = :nombre,
-                        apellidos = :apellidos,
-                        email = :email,
+                        curso = :curso,
+                        titulo = :titulo,
                         poblacion = :poblacion,
-                        dni = :dni,
+                        jornadas = :jornadas,
                         fechaNac = :fechaNac,
                         id_curso = :id_curso
                 WHERE
@@ -311,13 +383,13 @@ class actividadesModel extends Model
 
             $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
 
-            $pdoSt->bindParam(':nombre', $alumno->nombre, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':apellidos', $alumno->apellidos, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':email', $alumno->email, PDO::PARAM_STR, 50);
-            $pdoSt->bindParam(':poblacion', $alumno->poblacion, PDO::PARAM_STR, 30);
-            $pdoSt->bindParam(':dni', $alumno->dni, PDO::PARAM_STR, 9);
-            $pdoSt->bindParam(':fechaNac', $alumno->fechaNac);
-            $pdoSt->bindParam(':id_curso', $alumno->id_curso, PDO::PARAM_INT);
+            $pdoSt->bindParam(':nombre', $actividad->nombre, PDO::PARAM_STR, 30);
+            $pdoSt->bindParam(':curso', $actividad->curso, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':titulo', $actividad->titulo, PDO::PARAM_STR, 50);
+            $pdoSt->bindParam(':poblacion', $actividad->poblacion, PDO::PARAM_STR, 30);
+            $pdoSt->bindParam(':jornadas', $actividad->jornadas, PDO::PARAM_STR, 9);
+            $pdoSt->bindParam(':fechaNac', $actividad->fechaNac);
+            $pdoSt->bindParam(':id_curso', $actividad->id_curso, PDO::PARAM_INT);
 
             $pdoSt->execute();
         } catch (PDOException $e) {
@@ -330,7 +402,7 @@ class actividadesModel extends Model
     {
 
         try {
-            $sql = "DELETE FROM alumnos WHERE id = :id limit 1";
+            $sql = "DELETE FROM actividads WHERE id = :id limit 1";
             $conexion = $this->db->connect();
             $pdoSt = $conexion->prepare($sql);
             $pdoSt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -342,7 +414,7 @@ class actividadesModel extends Model
         }
     }
 
-    # Extraer todos los alumnos
+    # Extraer todos los actividads
     public function order($criterio)
     {
 
@@ -352,12 +424,12 @@ class actividadesModel extends Model
                 
                     SELECT a.id,
                         a.nombre,
-                        a.apellidos,
-                        a.email,
+                        a.curso,
+                        a.titulo,
                         a.poblacion,
                         a.fechaNac,
                         c.nombreCorto curso
-                    FROM alumnos as a inner join cursos as c
+                    FROM actividads as a inner join cursos as c
                         ON a.id_curso = c.id
                     ORDER BY $criterio
 
@@ -387,20 +459,20 @@ class actividadesModel extends Model
                 
                 SELECT a.id,
                        a.nombre,
-                       a.apellidos,
-                       a.email,
+                       a.curso,
+                       a.titulo,
                        a.poblacion,
                        a.fechaNac,
                        c.nombreCorto curso
-                FROM alumnos as a inner join cursos as c
+                FROM actividads as a inner join cursos as c
                      ON a.id_curso = c.id
                 WHERE 
                         CONCAT_WS(', ', 
                                   a.id,
                                   a.nombre,
-                                  a.apellidos,
+                                  a.curso,
                                   a.poblacion,
-                                  a.dni,
+                                  a.jornadas,
                                   TIMESTAMPDIFF(YEAR, a.fechaNac, now()),
                                   a.fechaNac,
                                   c.nombreCorto,
@@ -476,13 +548,13 @@ class actividadesModel extends Model
         }
     }
 
-    public function validarDni($dni)
+    public function validarjornadas($jornadas)
     {
 
         try {
             $sql = "
-                    SELECT * FROM alumnos
-                    WHERE dni = :dni
+                    SELECT * FROM actividads
+                    WHERE jornadas = :jornadas
             ";
 
             # Conectamos con la base de datos
@@ -490,7 +562,7 @@ class actividadesModel extends Model
 
             # Ejecutamos mediante prepare la consulta SQL
             $result = $conexion->prepare($sql);
-            $result->bindParam(':dni', $dni, PDO::PARAM_STR);
+            $result->bindParam(':jornadas', $jornadas, PDO::PARAM_STR);
             $result->execute();
 
             if ($result->rowCount() == 1)

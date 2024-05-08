@@ -100,18 +100,21 @@ create table IF NOT EXISTS actividades(
     profesores_participantes text,
     que_hacen_afectados varchar(100),
     observaciones text,
-    adjuntos varchar(100),
+    adjuntos varchar(255),
     categorias varchar(255),
-    estado ENUM ('planificado', 'enviado', 'validado', 'difundido', 'archivado', 'cancelado'),
-    departamento_id int unsigned,
-	coordinador_id int unsigned,
+    estado ENUM ('Borrador', 'Planificado', 'Validado', 'Difundido', 'Archivado', 'Cancelado', 'Celebrado'),
+    departamento_id int unsigned not null,
+	coordinador_id int unsigned not null,
+    user_id int unsigned,
     email varchar(100),
     nombre varchar(100),
     foreign key (coordinador_id) references profesores (id) 
     ON delete SET NULL ON UPDATE CASCADE,
     foreign key (departamento_id) references departamentos (id) 
     ON delete SET NULL ON UPDATE CASCADE,
-    
+    foreign key (user_id) references users(id) 
+    ON delete SET NULL ON UPDATE CASCADE,
+
     create_at timestamp default current_timestamp,
     update_at timestamp default current_timestamp
 );

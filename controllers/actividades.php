@@ -121,6 +121,7 @@ class Actividades extends Controller
             # 1. Saneamos datos del formulario FILTER_SANITIZE
             $nombre = filter_var($_POST['nombre'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $email = filter_var($_POST['email'] ??= '', FILTER_SANITIZE_EMAIL);
+            $estado = filter_var($_POST['estado'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $titulo = filter_var($_POST['titulo'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $descripcion = filter_var($_POST['descripcion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $lugar_celebracion = filter_var($_POST['lugar_celebracion'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -150,7 +151,7 @@ class Actividades extends Controller
             # organización
             $coordinador_id = filter_var($_POST['coordinador_id'] ??= '', FILTER_SANITIZE_NUMBER_INT);
             $departamento_id = filter_var($_POST['departamento_id'] ??= '', FILTER_SANITIZE_NUMBER_INT);
-            $profesores_participantes = filter_var($_POST['profesores_participantes'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
+            $profesores_participantes = $_POST['profesores_participantes'] ??= [];
             $que_hacen_afectados = filter_var($_POST['que_hacen_afectados'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
             $colaboracion_coordinador = filter_var($_POST['colaboracion_coordinador'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -186,11 +187,12 @@ class Actividades extends Controller
                 $observaciones,
                 null,
                 null,
-                'planificado',
+                $estado,
                 $departamento_id,
                 $coordinador_id,
                 $email,
-                $nombre
+                $nombre,
+                $_SESSION['id']
             );
 
             # 3. Validación de los datos
@@ -386,9 +388,9 @@ class Actividades extends Controller
                 header('location:' . URL . 'actividades/nuevo');
             } else {
 
-                # Mostrar actividad
-                var_dump($actividad);
-                exit();
+                # Mostrar actividad prueba
+                // var_dump($actividad);
+                // exit();
 
                 # Crear alumno
                 $this->model->create($actividad);
