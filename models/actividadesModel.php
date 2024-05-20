@@ -313,6 +313,7 @@ class actividadesModel extends Model
             $pdoSt->bindParam(':user_id', $actividad->user_id, PDO::PARAM_INT);
             # Insertar actividad    
             $pdoSt->execute();
+            return ($conexion->lastInsertId());
         } catch (PDOException $e) {
             include_once('template/partials/errorDB.php');
             exit();

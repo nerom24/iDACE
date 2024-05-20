@@ -159,6 +159,9 @@ class Actividades extends Controller
             $ficheros = $_FILES['files'] ??= [];
             $observaciones = filter_var($_POST['observaciones'] ??= '', FILTER_SANITIZE_SPECIAL_CHARS);
 
+            # control para subida archivos
+            $subir_archivos = false;
+
             # 2. Creamos el objeto alumno con los datos saneados
             $actividad = new Actividad(
                 null,
@@ -345,6 +348,9 @@ class Actividades extends Controller
 
                 # Validar todos los archivos
                 foreach ($ficheros['name'] as $index => $nombreArchivo) {
+                    # control de subida de archivos
+                    $this->subir_archivos = false;
+
                     # Comprobar si hay errores
                     if ($ficheros['error'][$index] !== UPLOAD_ERR_OK) {
                         $errores['files'] = $FileUploadErrors[$ficheros['error'][$index]];
@@ -366,6 +372,8 @@ class Actividades extends Controller
                             $errores['files'] = "Tipos de archivos válidos JPG, JPEG, PNG, PDF";
                             break;
                         }
+                        # activo control subida archivos
+                        $subir_archivos = true;
                     }
                 }
             }
@@ -392,8 +400,32 @@ class Actividades extends Controller
                 // var_dump($actividad);
                 // exit();
 
-                # Crear alumno
-                $this->model->create($actividad);
+                # Crear actividad
+                # Devuelve el id de la actividad creada, en caso decincluir archivos
+                # se creará una carpeta con dicho id 
+                $carpeta = $this->model->create($actividad);
+
+                # Compruebo subida de archivos
+                if ($subir_archivos) {
+                    
+                    echo 'subo_archivos';
+
+                    # carpeta destino
+                    $carpeta_destino = 'ficheros/'.$carpeta;
+
+
+                    if (!is_dir($carpeta_destino)) {
+                        if (!mkdir($carpeta_destino, 0755, true)) {
+                            echo "Lo siento, no se pudo crear la carpeta de destino.";
+                            $uploadOk = 0;
+                        }
+                    }
+
+                    # Muevo todos los archivos desde la carpeta tempora a la destino
+                    foreach ($ficheros['name'] as $index => $nombreArchivo) {
+                        move_uploaded_file($ficheros['tmp_name'][$index], $carpeta_destino . '/' . $nombreArchivo);
+                    }
+                }
 
                 # Crear mensaje
                 $_SESSION['mensaje'] = 'Actividad creada correctamente';

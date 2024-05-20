@@ -62,3 +62,7 @@ INSERT INTO Actividades (
                        'nerom24@gmail.com',
                        'Moreno Jiménez, Juan Carlos'
                     );
+alter table actividades modify column estado ENUM ('Borrador', 'Planificado', 'Validado', 'Difundido', 'Archivado', 'Cancelado', 'Celebrado');
+alter table actividades add column user_id int unsigned;
+alter table actividades add constraint foreign key (user_id) references users(id) 
+    ON delete SET NULL ON UPDATE CASCADE
