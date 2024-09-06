@@ -27,7 +27,7 @@
                     <!-- Mostramos el encabezado de la tabla -->
                     <tr>
                         <th>Id</th>
-                        <th>Num</th>
+                        <!-- <th>Num</th> -->
                         <th>Título</th>
                         <th>Fecha</th>
                         <th>Hora Ini</th>
@@ -46,15 +46,23 @@
                         <tr>
                             <!-- Detalles de artículos -->
                             <td><?= $actividad->id ?></td>
-                            <td><?= $actividad->num_actividad ?></td>
-                            <td><?= $actividad->titulo ?></td>
-                            <td><?= $actividad->fecha_inicio ?></td>
-                            <td><?= $actividad->hora_inicio ?></td>
-                            <td><?= $actividad->hora_fin ?></td>
-                            <td><?= $actividad->cursos ?></td>
-                            <td><?= $actividad->nombre ?></td>
-                            <td><?= $actividad->departamento ?></td>
-                            <td><?= $actividad->lugar_celebracion ?></td>
+                            <!-- <td><?= $actividad->num_actividad ?></td> -->
+                            <td><span class="badge bg-dark"><?= $actividad->titulo ?></span></td>
+                            <!-- <td><?= $actividad->titulo ?></td> -->
+                            <td><span class="badge bg-primary"><?php echo date("d-m-Y", strtotime($actividad->fecha_inicio)); ?></span></td>
+                            <!-- <td><?= $actividad->fecha_inicio ?></td> -->
+                            <td><span class="badge bg-info"><?php echo date("H:i", strtotime($actividad->hora_inicio)); ?></span></td> <!-- Hora en formato 24h -->
+                            <!-- <td><?= $actividad->hora_inicio ?></td> -->
+                            <td><span class="badge bg-danger"><?php echo date("H:i", strtotime($actividad->hora_fin)); ?></span></td>
+                            <!-- <td><?= $actividad->hora_fin ?></td> -->
+                            <td><span class="badge bg-success"><?= $actividad->cursos ?></span></td>
+                            <!-- <td><?= $actividad->cursos ?></td> -->
+                            <td><span class="badge bg-warning"><?= $actividad->nombre ?></span></td>
+                            <!-- <td><?= $actividad->nombre ?></td> -->
+                            <td><span class="badge bg-secondary"><?= $actividad->departamento ?></span></td>
+                            <!-- <td><?= $actividad->departamento ?></td> -->
+                            <td><span class="badge bg-success"><?= $actividad->lugar_celebracion ?></span></td>
+                            <!-- <td><?= $actividad->lugar_celebracion ?></td> -->
                             
                             <!-- Columna de acciones -->
                             <td>

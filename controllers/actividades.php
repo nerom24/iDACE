@@ -435,4 +435,60 @@ class Actividades extends Controller
             }
         }
     }
+
+    public function editar($param = []) {
+
+        # iniciamos o continuamos sesión
+        sec_session_start();
+
+        # Compruebo usuario autentificado
+        if (!isset($_SESSION['id'])) {
+            $_SESSION['mensaje'] = "Usuario debe autentificarse";
+            
+            header("location:". URL. "login");
+            
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['editar']))){
+
+            $_SESSION['mensaje'] = "Operación sin privilegios";
+            header("location:" .URL. "alumnos");
+
+        } else {
+
+        # Iniciamos o continuamos sesión
+        session_start();
+
+        # Obtengo el id de alumno alumnos/editar/2
+        $this->view->id = $param[0];
+
+        # Obtengo el objeto de la clase alumno
+        $this->view->alumno = $this->model->read($this->view->id);
+
+        # Comprobar si el formulario viene de una no validación
+        if (isset($_SESSION['error'])) {
+
+            # Mensaje de error
+            $this->view->error = $_SESSION['error'];
+            unset($_SESSION['error']);
+
+            # Autorrelleno del formulario
+            $this->view->alumno = unserialize($_SESSION['alumno']);
+            unset($_SESSION['alumno']);
+
+            # Cargo los errores específicos
+            $this->view->errores = $_SESSION['errores'];
+            unset($_SESSION['errores']);
+
+        }
+        
+        # título de la página
+        $this->view->title= "Formulario Edición Alumnos";
+
+        # obtener los cursos generar dinámicamente combox de cursos
+        $this->view->cursos = $this->model->getCursos();
+
+        # cargar la vista
+        $this->view->render('alumnos/editar/index');
+        }
+
+    } 
 }
