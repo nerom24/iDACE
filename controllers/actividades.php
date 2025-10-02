@@ -447,21 +447,19 @@ class Actividades extends Controller
             
             header("location:". URL. "login");
             
-        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['editar']))){
+        } else if ((!in_array($_SESSION['id_rol'], $GLOBALS['actividad']['edit']))){
 
             $_SESSION['mensaje'] = "Operación sin privilegios";
             header("location:" .URL. "alumnos");
 
         } else {
 
-        # Iniciamos o continuamos sesión
-        session_start();
 
-        # Obtengo el id de alumno alumnos/editar/2
+        # Obtengo el id de la actividad actividades/editar/id
         $this->view->id = $param[0];
 
-        # Obtengo el objeto de la clase alumno
-        $this->view->alumno = $this->model->read($this->view->id);
+        # Obtengo el objeto de la clase actividad
+        $this->view->actvidad = $this->model->read($this->view->id);
 
         # Comprobar si el formulario viene de una no validación
         if (isset($_SESSION['error'])) {
@@ -471,8 +469,8 @@ class Actividades extends Controller
             unset($_SESSION['error']);
 
             # Autorrelleno del formulario
-            $this->view->alumno = unserialize($_SESSION['alumno']);
-            unset($_SESSION['alumno']);
+            $this->view->actividad = unserialize($_SESSION['actividad']);
+            unset($_SESSION['actividad']);
 
             # Cargo los errores específicos
             $this->view->errores = $_SESSION['errores'];
@@ -481,13 +479,30 @@ class Actividades extends Controller
         }
         
         # título de la página
-        $this->view->title= "Formulario Edición Alumnos";
+        $this->view->title= "DACE - Edición Formulario Planificación Actividades ";
 
-        # obtener los cursos generar dinámicamente combox de cursos
+        # obtener los profesores generar dinámicamente combox de profesores
+        $this->view->profesores = $this->model->getProfesores();
+
+        $this->view->acompanantes = $this->model->getProfesores();
+
+        # obtener los departamentos generar dinámicamente combox de departamentos
+        $this->view->departamentos = $this->model->getDepartamentos();
+
+        # obtener las categorías generar dinámicamente etiquetas de categorías
+        $this->view->categorias = $this->model->getCategorias();
+
+        # obtener los cursos
         $this->view->cursos = $this->model->getCursos();
 
-        # cargar la vista
-        $this->view->render('alumnos/editar/index');
+        # cargar los campos por defecto nombre usuario y email
+        $this->view->actividad->nombre = $_SESSION['name_user'];
+        $this->view->actividad->email = $_SESSION['email_user'];
+
+
+        # carge la vista editar formulario
+        $this->view->render('actividades/editar/index');
+
         }
 
     } 

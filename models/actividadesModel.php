@@ -16,16 +16,17 @@ class actividadesModel extends Model
             $sql = "
                 
                 SELECT 
-                a.id,
-                a.num_actividad,
-                a.titulo,
-                a.fecha_inicio,
-                a.hora_inicio,
-                a.hora_fin,
-                a.cursos,
-                p.nombre,
-                d.departamento,
-                a.lugar_celebracion
+                    a.id,
+                    a.num_actividad,
+                    a.titulo,
+                    a.curso,
+                    a.fecha_inicio,
+                    a.hora_inicio,
+                    a.hora_fin,
+                    a.cursos,
+                    p.nombre,
+                    d.departamento,
+                    a.lugar_celebracion
             FROM
                 idace.actividades a
                     INNER JOIN
@@ -335,7 +336,7 @@ class actividadesModel extends Model
                                 fechaNac,
                                 id_curso
                         FROM 
-                                actividads
+                                actividades
                         WHERE
                                 id = :id
                 ";

@@ -74,6 +74,40 @@ create table IF NOT EXISTS planificadas(
     update_at timestamp default current_timestamp
 );
 
+
+
+CREATE TABLE IF NOT EXISTS users(
+
+	id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    email VARCHAR(50) UNIQUE,
+    password CHAR(60),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS roles;
+CREATE TABLE IF NOT EXISTS roles(
+
+	id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20),
+    description VARCHAR(100),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS roles_users;
+CREATE TABLE IF NOT EXISTS roles_users(
+
+	id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	user_id INT UNSIGNED,
+    role_id INT UNSIGNED,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 DROP TABLE IF EXISTS actividades;
 create table IF NOT EXISTS actividades(
     id int unsigned auto_increment primary key,
@@ -109,11 +143,11 @@ create table IF NOT EXISTS actividades(
     email varchar(100),
     nombre varchar(100),
     foreign key (coordinador_id) references profesores (id) 
-    ON delete SET NULL ON UPDATE CASCADE,
+    ON delete RESTRICT ON UPDATE CASCADE,
     foreign key (departamento_id) references departamentos (id) 
-    ON delete SET NULL ON UPDATE CASCADE,
+    ON delete RESTRICT ON UPDATE CASCADE,
     foreign key (user_id) references users(id) 
-    ON delete SET NULL ON UPDATE CASCADE,
+    ON delete RESTRICT ON UPDATE CASCADE,
 
     create_at timestamp default current_timestamp,
     update_at timestamp default current_timestamp
@@ -212,9 +246,25 @@ INSERT INTO actividades VALUES
     'Planificado', 						-- estado
     1, 									-- departamento_id
     1, 									-- coordinador_id
+    null,								-- user_id
     'jmorjim394@gmail.com', 			-- email
     'Juan Carlos', 						-- nombre
     default, 
     default 
     );
 
+
+
+INSERT INTO roles VALUES
+(1, 'Administrador', 'Todos los privilegios de la aplicación', default, default),
+(2, 'Editor', 'Sólo podrá consultar, modificar y añadir información. No podrá eliminar', default, default),
+(3, 'Registrado', 'Sólo podrá realizar consultas', default, default);
+
+-- Importar datos profesores
+LOAD DATA INFILE "C:/xampp/htdocs/idace/bd/tabla_profesores_23_24.csv" INTO TABLE 
+idace.profesores
+CHARACTER SET UTF8
+FIELDS TERMINATED BY ';' optionally ENCLOSED BY '\"' LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(nombre, puesto, telefono, usuario, email);
+    
